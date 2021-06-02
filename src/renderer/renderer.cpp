@@ -49,7 +49,7 @@ void Renderer::clear(){
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Renderer::update(){
+void Renderer::update(float *startX, float *startY, float *endX, float *endY){
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame(gWindow);
     ImGui::NewFrame();
@@ -76,6 +76,8 @@ void Renderer::update(){
         }else if(e.type == SDL_KEYDOWN){
             if(e.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
                 running = false;
+            }else{
+                
             }
         }
     }

@@ -13,6 +13,12 @@ int main(int argc, char *argv[]){
     Equation *e = new Equation("");
     Renderer r;
 
+    //viewport controls
+    float startX = -1.0f;
+    float endX = 1.0f;
+    float startY = -1.0f;
+    float endY = 1.0f;
+
     while(r.isRunning()){
         r.clear();
         if(r.eqShouldUpdate()){
@@ -20,7 +26,8 @@ int main(int argc, char *argv[]){
             e = new Equation(r.exportEq());
             std::cout<<"x=0: "<<e->evalAtX(0.0f)<<std::endl;
         }
-        r.update();
+
+        r.update(&startX, &startY, &endX, &endY);
     }
 
     delete e;

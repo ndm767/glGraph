@@ -17,7 +17,7 @@ public:
     bool isRunning(){ return running; }
 
     void clear();
-    void update();
+    void update(float *startX, float *startY, float *endX, float *endY);
 
     void graphPoint(float x, float y);
     void graphLine(std::unordered_map<int, int> points);
@@ -31,7 +31,7 @@ public:
             return "";
         }
     }
-    
+
 private:
     bool running;
     int screenWidth = 640;
