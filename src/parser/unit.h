@@ -16,6 +16,7 @@ public:
         return uString;
     }
 private:
+    void performOps(std::vector< std::variant <Operation, float> >& transformed, char op1, char op2);
     std::vector< std::variant<Unit, Operation, float> > parts;
     std::string uString;
 };
