@@ -6,6 +6,9 @@
 int main(int argc, char *argv[]){
 
     //TODO: support negative numbers in equation
+    //TODO: support range export in equation
+    //TODO: support zoom
+    //TODO: support movement
 
     Equation *e = new Equation("");
     Renderer r;
