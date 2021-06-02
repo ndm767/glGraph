@@ -7,12 +7,15 @@ Equation::Equation(std::string equation){
     origEq = parenEq(equation);
     std::cout<<"Original: "<<equation<<std::endl;
     std::cout<<"Paren'd: "<<origEq<<std::endl;
-    Unit u(origEq);
-    float out = u.evalUnit(0.0f);
+    baseUnit = new Unit(origEq);
 }
 
 Equation::~Equation(){
+    delete baseUnit;
+}
 
+float Equation::evalAtX(float x){
+    return baseUnit->evalUnit(x);
 }
 
 bool Equation::isOperator(char c){
