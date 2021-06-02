@@ -12,16 +12,14 @@ int main(int argc, char *argv[]){
     //TODO: support undefined behavior (divide by 0, etc)
     //TODO: Actually make the thing graph
     //TODO: axis labeling
-    //TODO: figure out why x^2 + 2x + 5 doesn't work
-    //TODO: figure out why you get weird numbers when x approaches zero with resolution 0.1f
-
+    
     std::string currEq = "";
     Equation *e = new Equation("");
     Renderer r;
 
     //viewport controls
-    float startX = -1.0f;
-    float endX = 1.0f;
+    float startX = 0.0f;
+    float endX = 2.0f;
     float startY = -1.0f;
     float endY = 1.0f;
     float resolution = 0.5f;
@@ -33,7 +31,6 @@ int main(int argc, char *argv[]){
             delete e;
             e = new Equation(currEq);
             std::map<float, float> r = e->exportRange(startX, endX, resolution);
-            std::cout<<"x=-1: "<<e->evalAtX(-1.0f)<<std::endl;
             for(auto [x, y] : r){
                 std::cout<<"x="<<x<<" "<<"y="<<y<<std::endl;
             }

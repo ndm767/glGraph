@@ -71,6 +71,14 @@ void Unit::performOps(std::vector< std::variant <Operation, float> >& transforme
     }
 }
 
+std::vector< std::variant<Operation, float> > Unit::transformUnit(std::vector< std::variant<Operation, float> > input){
+    std::vector<std::variant<Operation, float>> t = input;
+    performOps(t, '^', ' ');
+    performOps(t, '*', '/');
+    performOps(t, '+', '-');
+    return t;
+}
+
 float Unit::evalUnit(float x){
     //return if it is just x
     if(uString == "x"){
@@ -96,20 +104,13 @@ float Unit::evalUnit(float x){
         }
     }
 
+    while(transformed.size() > 1){
+        transformed = transformUnit(transformed);
+    }
+
     //return the number if it is just a number
-    if(transformed.size() == 1 && std::holds_alternative<float>(transformed.at(0))){
+    if(std::holds_alternative<float>(transformed.at(0))){
         return std::get<float>(transformed.at(0));
     }
-
-    performOps(transformed, '^', ' ');
-    performOps(transformed, '*', '/');
-    performOps(transformed, '+', '-');
-
-    if(transformed.size() == 1){
-        if(std::holds_alternative<float>(transformed.at(0))){
-            return std::get<float>(transformed.at(0));
-        }
-    }
-
     return 0;
 }
