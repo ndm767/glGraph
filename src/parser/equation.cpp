@@ -101,8 +101,9 @@ std::map<float, float> Equation::exportRange(float startX, float endX, float res
     if(resolution == 0.0f)
         resolution = 0.1f;
     
-    for(float i = startX; i < endX + resolution; i += resolution){
-        ret[i] = evalAtX(i);
+    //everything is multiplied by 10 to avoid error with floating point precision
+    for(float i = startX*10; i < endX*10 + resolution*10; i += resolution*10){
+        ret[i/10.0f] = evalAtX(i/10.0f);
     }
     return ret;
 }
