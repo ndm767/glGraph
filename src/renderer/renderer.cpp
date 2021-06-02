@@ -85,6 +85,6 @@ void Renderer::graphPoint(float x, float y){
 
 }
 
-void Renderer::graphLine(std::unordered_map<int, int> points){
+void Renderer::graphLine(std::map<int, int> points){
 
 }

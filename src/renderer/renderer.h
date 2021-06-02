@@ -2,7 +2,7 @@
 
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
-#include <unordered_map>
+#include <map>
 #include <string>
 
 #include "imgui/imgui.h"
@@ -20,7 +20,7 @@ public:
     void update(float *startX, float *startY, float *endX, float *endY);
 
     void graphPoint(float x, float y);
-    void graphLine(std::unordered_map<int, int> points);
+    void graphLine(std::map<int, int> points);
 
     bool eqShouldUpdate(){ return eqUpdate; }
     std::string exportEq(){
