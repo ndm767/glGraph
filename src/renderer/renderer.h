@@ -9,6 +9,8 @@
 #include "imgui/imgui_impl_sdl.h"
 #include "imgui/imgui_impl_opengl3.h"
 
+#include "shader.h"
+
 class Renderer{
 public:
     Renderer();
@@ -32,4 +34,6 @@ private:
 
     SDL_Window *gWindow;
     SDL_GLContext gContext;
+
+    Shader s;
 };

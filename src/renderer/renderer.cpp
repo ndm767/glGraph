@@ -52,6 +52,8 @@ void Renderer::clear(){
 bool Renderer::update(float *startX, float *startY, float *endX, float *endY, float *resolution, std::string *equ){
     bool ret = false;
 
+    s.useProgram();
+
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame(gWindow);
     ImGui::NewFrame();
