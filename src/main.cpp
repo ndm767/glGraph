@@ -10,9 +10,11 @@ int main(int argc, char *argv[]){
     std::cout<<"x=1: "<<e.evalAtX(1.0f)<<std::endl;
     std::cout<<"x=2: "<<e.evalAtX(2.0f)<<std::endl;
 
+    //TODO: support negative numbers in equation
     std::string eq2 = "2^(x+1)";
     Equation e2(eq2);
 
+    std::cout<<"x=-1: "<<e2.evalAtX(-1.0f)<<std::endl;
     std::cout<<"x=0: "<<e2.evalAtX(0.0f)<<std::endl;
     std::cout<<"x=1: "<<e2.evalAtX(1.0f)<<std::endl;
     std::cout<<"x=2: "<<e2.evalAtX(2.0f)<<std::endl;
