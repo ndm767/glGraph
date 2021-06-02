@@ -1,7 +1,12 @@
 #include "renderer.h"
 
+#include <iostream>
+
 Renderer::Renderer(){
     running = true;
+
+    for(int i = 0; i<512; i++)
+        eqBuf[i] = 0;
 
     SDL_Init(SDL_INIT_VIDEO);
 
@@ -15,9 +20,23 @@ Renderer::Renderer(){
 
     glewExperimental = true;
     glewInit();
+
+    //Imgui stuff
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+    ImGui::StyleColorsDark();
+
+    ImGui_ImplSDL2_InitForOpenGL(gWindow, gContext);
+    ImGui_ImplOpenGL3_Init();
 }
 
 Renderer::~Renderer(){
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplSDL2_Shutdown();
+    ImGui::DestroyContext();
+
     SDL_GL_DeleteContext(gContext);
     SDL_DestroyWindow(gWindow);
     SDL_Quit();
@@ -29,10 +48,27 @@ void Renderer::clear(){
 }
 
 void Renderer::update(){
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplSDL2_NewFrame(gWindow);
+    ImGui::NewFrame();
+
+    ImGui::Begin("Grapher");
+    ImGui::Text("Enter equation: ");
+    ImGui::SameLine();
+    ImGui::InputTextWithHint("", "equation", eqBuf, IM_ARRAYSIZE(eqBuf));
+    if(ImGui::Button("Graph")){
+        std::cout<<eqBuf<<std::endl;
+    }
+    ImGui::ColorEdit3("Line Color", lineColor);
+    ImGui::End();
+
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     SDL_GL_SwapWindow(gWindow);
 
     SDL_Event e;
     while(SDL_PollEvent(&e)){
+        ImGui_ImplSDL2_ProcessEvent(&e);
         if(e.type == SDL_QUIT){
             running = false;
         }else if(e.type == SDL_KEYDOWN){
