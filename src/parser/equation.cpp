@@ -92,3 +92,11 @@ std::string Equation::parenEq(std::string eq){
     }
     return stepThreeOut;
 }
+
+std::map<float, float> Equation::exportRange(float startX, float endX, float resolution){
+    std::map<float, float> ret;
+    for(float i = startX; i < endX + resolution; i += resolution){
+        ret[i] = evalAtX(i);
+    }
+    return ret;
+}

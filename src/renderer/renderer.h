@@ -20,7 +20,7 @@ public:
     void update(float *startX, float *startY, float *endX, float *endY);
 
     void graphPoint(float x, float y);
-    void graphLine(std::map<int, int> points);
+    void graphLine(std::map<float, float> points);
 
     bool eqShouldUpdate(){ return eqUpdate; }
     std::string exportEq(){

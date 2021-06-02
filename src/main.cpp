@@ -9,6 +9,7 @@ int main(int argc, char *argv[]){
     //TODO: support range export in equation
     //TODO: support zoom
     //TODO: support movement
+    //TODO: support undefined behavior (divide by 0, etc)
 
     Equation *e = new Equation("");
     Renderer r;
@@ -24,7 +25,10 @@ int main(int argc, char *argv[]){
         if(r.eqShouldUpdate()){
             delete e;
             e = new Equation(r.exportEq());
-            std::cout<<"x=0: "<<e->evalAtX(0.0f)<<std::endl;
+            std::map<float, float> r = e->exportRange(startX, endX, 0.5f);
+            for(auto [x, y] : r){
+                std::cout<<"x="<<x<<" "<<"y="<<y<<std::endl;
+            }
         }
 
         r.update(&startX, &startY, &endX, &endY);

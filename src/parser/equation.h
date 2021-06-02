@@ -2,6 +2,7 @@
 
 #include <string>
 #include <memory>
+#include <map>
 
 #include "unit.h"
 
@@ -11,6 +12,8 @@ public:
     ~Equation();
 
     float evalAtX(float x);
+
+    std::map<float, float> exportRange(float startX, float endX, float resolution);
 private:
     std::string origEq;
 
