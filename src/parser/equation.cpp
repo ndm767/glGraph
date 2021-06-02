@@ -29,22 +29,60 @@ bool Equation::isOperator(char c){
 }
 
 std::string Equation::parenEq(std::string eq){
-    std::string ret = "";
-
     //go through and surround all numbers and variables with parenthesis
-    auto it = eq.begin();
+    std::string stepOneOut = "";
     std::string curr = "";
-    for(; it < eq.end(); it++){
-        if(!isOperator(*it)){
+    for(auto it = eq.begin(); it < eq.end(); it++){
+        //x can only ever be by itself
+        if(*it == 'x'){
+            if(curr != ""){
+                stepOneOut += "(" + curr + ")";
+                curr = "";
+            }
+            stepOneOut += "(x)";
+
+        }else if(!isOperator(*it)){
             curr += *it;
         }else{
             if(curr != ""){
-                ret += "(" + curr + ")";
+                stepOneOut += "(" + curr + ")";
                 curr = "";
             }
-            ret += *it;
+            stepOneOut += *it;
         }
     }
+    //catch potential last unit and clear curr for reuse    
+    if(curr != ""){
+        stepOneOut += "(" + curr + ")";
+        curr = "";
+    }
 
-    return ret;
+    //add multiplication signs for implied multiplication
+    char last = -1;
+    curr = "";
+    std::string stepTwoOut = "";
+    for(auto it = stepOneOut.begin(); it < stepOneOut.end(); it++){
+
+        if(*it != '('){
+            last = *it;
+        }else if(last == ')'){
+            stepTwoOut += curr;
+            stepTwoOut += "*";
+            curr = "";
+        }
+        curr += *it;
+    }
+    if(curr != ""){
+        stepTwoOut += curr;
+        curr = "";
+    }
+
+    //remove spaces
+    std::string stepThreeOut = "";
+    for(auto it = stepTwoOut.begin(); it < stepTwoOut.end(); it++){
+        if(*it != ' '){
+            stepThreeOut += *it;
+        }
+    }
+    return stepThreeOut;
 }
