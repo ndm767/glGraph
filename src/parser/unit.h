@@ -12,6 +12,10 @@ public:
     ~Unit();
 
     float evalUnit(float x);
+    std::string getUnitString(){
+        return uString;
+    }
 private:
     std::vector< std::variant<Unit, Operation, float> > parts;
+    std::string uString;
 };

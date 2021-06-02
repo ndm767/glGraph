@@ -1,4 +1,5 @@
 #include "equation.h"
+#include "unit.h"
 
 #include <iostream>
 
@@ -6,6 +7,8 @@ Equation::Equation(std::string equation){
     origEq = parenEq(equation);
     std::cout<<"Original: "<<equation<<std::endl;
     std::cout<<"Paren'd: "<<origEq<<std::endl;
+    Unit u(origEq);
+    float out = u.evalUnit(0.0f);
 }
 
 Equation::~Equation(){

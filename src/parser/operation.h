@@ -4,12 +4,12 @@
 
 class Operation{
 public:
-    Operation(std::string op);
+    Operation(char op);
     ~Operation();
     float performOperation(float lhs, float rhs);
-    std::string getOp(){
+    char getOp(){
         return op;
     }
 private:
-    std::string op;
+    char op;
 };

@@ -1,6 +1,6 @@
 #include "operation.h"
 
-Operation::Operation(std::string op){
+Operation::Operation(char op){
     this->op = op;
 }
 
