@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "parser/equation.h"
+#include "renderer/renderer.h"
 
 int main(int argc, char *argv[]){
     std::string eq = "2x + 3 * (12 - 5)";
@@ -18,6 +19,14 @@ int main(int argc, char *argv[]){
     std::cout<<"x=0: "<<e2.evalAtX(0.0f)<<std::endl;
     std::cout<<"x=1: "<<e2.evalAtX(1.0f)<<std::endl;
     std::cout<<"x=2: "<<e2.evalAtX(2.0f)<<std::endl;
+
+    Renderer r;
+
+    while(r.isRunning()){
+        r.clear();
+
+        r.update();
+    }
     
     return 0;
 }
