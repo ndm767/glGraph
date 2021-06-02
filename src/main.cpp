@@ -11,6 +11,7 @@ int main(int argc, char *argv[]){
     //TODO: support movement
     //TODO: support undefined behavior (divide by 0, etc)
 
+    std::string currEq = "";
     Equation *e = new Equation("");
     Renderer r;
 
@@ -19,19 +20,20 @@ int main(int argc, char *argv[]){
     float endX = 1.0f;
     float startY = -1.0f;
     float endY = 1.0f;
+    float resolution = 0.5f;
 
     while(r.isRunning()){
         r.clear();
-        if(r.eqShouldUpdate()){
+
+        if(r.update(&startX, &startY, &endX, &endY, &resolution, &currEq)){
             delete e;
-            e = new Equation(r.exportEq());
-            std::map<float, float> r = e->exportRange(startX, endX, 0.5f);
+            e = new Equation(currEq);
+            std::map<float, float> r = e->exportRange(startX, endX, resolution);
             for(auto [x, y] : r){
                 std::cout<<"x="<<x<<" "<<"y="<<y<<std::endl;
             }
         }
 
-        r.update(&startX, &startY, &endX, &endY);
     }
 
     delete e;

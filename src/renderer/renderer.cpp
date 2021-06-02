@@ -49,7 +49,9 @@ void Renderer::clear(){
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Renderer::update(float *startX, float *startY, float *endX, float *endY){
+bool Renderer::update(float *startX, float *startY, float *endX, float *endY, float *resolution, std::string *equ){
+    bool ret = false;
+
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame(gWindow);
     ImGui::NewFrame();
@@ -58,10 +60,13 @@ void Renderer::update(float *startX, float *startY, float *endX, float *endY){
     ImGui::Text("Enter equation: ");
     ImGui::SameLine();
     ImGui::InputTextWithHint("", "equation", eqBuf, IM_ARRAYSIZE(eqBuf));
+    ImGui::Text("Resolution: ");
+    ImGui::SameLine();
+    ImGui::InputFloat("r", resolution);
     if(ImGui::Button("Graph")){
-        eqUpdate = true;
+        *equ = std::string(eqBuf);
+        ret = true;
     }
-    ImGui::ColorEdit3("Line Color", lineColor);
     ImGui::End();
 
     ImGui::Render();
@@ -79,6 +84,8 @@ void Renderer::update(float *startX, float *startY, float *endX, float *endY){
             }
         }
     }
+
+    return ret;
 }
 
 void Renderer::graphPoint(float x, float y){

@@ -17,20 +17,10 @@ public:
     bool isRunning(){ return running; }
 
     void clear();
-    void update(float *startX, float *startY, float *endX, float *endY);
+    bool update(float *startX, float *startY, float *endX, float *endY, float *resolution, std::string *equ);
 
     void graphPoint(float x, float y);
     void graphLine(std::map<float, float> points);
-
-    bool eqShouldUpdate(){ return eqUpdate; }
-    std::string exportEq(){
-        if(eqUpdate){
-            eqUpdate = false;
-            return std::string(eqBuf);
-        }else{
-            return "";
-        }
-    }
 
 private:
     bool running;
@@ -39,7 +29,6 @@ private:
 
     bool eqUpdate;
     char eqBuf[512];
-    float lineColor[3];
 
     SDL_Window *gWindow;
     SDL_GLContext gContext;

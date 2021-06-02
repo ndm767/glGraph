@@ -95,6 +95,10 @@ std::string Equation::parenEq(std::string eq){
 
 std::map<float, float> Equation::exportRange(float startX, float endX, float resolution){
     std::map<float, float> ret;
+    
+    if(resolution == 0.0f)
+        resolution = 0.1f;
+    
     for(float i = startX; i < endX + resolution; i += resolution){
         ret[i] = evalAtX(i);
     }
