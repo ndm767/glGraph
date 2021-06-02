@@ -21,11 +21,23 @@ public:
 
     void graphPoint(float x, float y);
     void graphLine(std::unordered_map<int, int> points);
+
+    bool eqShouldUpdate(){ return eqUpdate; }
+    std::string exportEq(){
+        if(eqUpdate){
+            eqUpdate = false;
+            return std::string(eqBuf);
+        }else{
+            return "";
+        }
+    }
+    
 private:
     bool running;
     int screenWidth = 640;
     int screenHeight = 480;
 
+    bool eqUpdate;
     char eqBuf[512];
     float lineColor[3];
 

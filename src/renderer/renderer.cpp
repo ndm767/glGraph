@@ -7,6 +7,8 @@ Renderer::Renderer(){
 
     for(int i = 0; i<512; i++)
         eqBuf[i] = 0;
+    
+    eqUpdate = false;
 
     SDL_Init(SDL_INIT_VIDEO);
 
@@ -57,7 +59,7 @@ void Renderer::update(){
     ImGui::SameLine();
     ImGui::InputTextWithHint("", "equation", eqBuf, IM_ARRAYSIZE(eqBuf));
     if(ImGui::Button("Graph")){
-        std::cout<<eqBuf<<std::endl;
+        eqUpdate = true;
     }
     ImGui::ColorEdit3("Line Color", lineColor);
     ImGui::End();
