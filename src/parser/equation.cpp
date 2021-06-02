@@ -49,6 +49,8 @@ std::string Equation::parenEq(std::string eq){
 
         }else if(!isOperator(*it)){
             curr += *it;
+        }else if(curr == "" && *it == '-'){
+            curr += *it;
         }else{
             if(curr != ""){
                 stepOneOut += "(" + curr + ")";
