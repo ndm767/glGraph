@@ -76,8 +76,6 @@ void Renderer::update(float *startX, float *startY, float *endX, float *endY){
         }else if(e.type == SDL_KEYDOWN){
             if(e.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
                 running = false;
-            }else{
-                
             }
         }
     }
