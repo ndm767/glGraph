@@ -5,8 +5,8 @@
 
 Equation::Equation(std::string equation){
     origEq = parenEq(equation);
-    //std::cout<<"Original: "<<equation<<std::endl;
-    //std::cout<<"Paren'd: "<<origEq<<std::endl;
+    std::cout<<"Original: "<<equation<<std::endl;
+    std::cout<<"Paren'd: "<<origEq<<std::endl;
     baseUnit = new Unit(origEq);
 }
 
@@ -38,24 +38,33 @@ std::string Equation::parenEq(std::string eq){
     //go through and surround all numbers and variables with parenthesis
     std::string stepOneOut = "";
     std::string curr = "";
+    bool prevIsOp = true;
     for(auto it = eq.begin(); it < eq.end(); it++){
-        //x can only ever be by itself
+        //x can only ever be by itself or with a negative sign
         if(*it == 'x'){
-            if(curr != ""){
+            prevIsOp = false;
+            if(curr == "-"){
+                stepOneOut += "(-x)";
+                curr = "";
+            }else if(curr != ""){
                 stepOneOut += "(" + curr + ")";
                 curr = "";
+                stepOneOut += "(x)";
+            }else{
+                stepOneOut += "(x)";
             }
-            stepOneOut += "(x)";
-
         }else if(!isOperator(*it)){
+            prevIsOp = false;
             curr += *it;
-        }else if(curr == "" && *it == '-'){
+        }else if(curr == "" && *it == '-' && prevIsOp){
+            prevIsOp = false;
             curr += *it;
         }else{
             if(curr != ""){
                 stepOneOut += "(" + curr + ")";
                 curr = "";
             }
+            prevIsOp = true;
             stepOneOut += *it;
         }
     }

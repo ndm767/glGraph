@@ -83,6 +83,8 @@ float Unit::evalUnit(float x){
     //return if it is just x
     if(uString == "x"){
         return x;
+    }else if(uString == "-x"){
+        return -1.0f*x;
     }
     
     //return if just number

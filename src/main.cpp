@@ -8,10 +8,8 @@ int main(int argc, char *argv[]){
     //TODO: support zoom
     //TODO: support movement
     //TODO: support undefined behavior (divide by 0, etc)
-    //TODO: Actually make the thing graph
     //TODO: axis labeling
     //TODO: allow for multiple lines
-    //TODO: implement -x in equations
 
     std::string currEq = "";
     Equation *e = new Equation("");
