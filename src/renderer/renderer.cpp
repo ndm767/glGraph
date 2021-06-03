@@ -116,7 +116,6 @@ void Renderer::graphLine(std::map<float, float> points){
         verts.push_back(x);
         verts.push_back(y);
         verts.push_back(0.0f);
-        std::cout<<x<<" "<<y<<std::endl;
     }
 
     l = new Line(verts);
