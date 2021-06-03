@@ -18,8 +18,6 @@ int main(int argc, char *argv[]){
     //viewport controls
     float startX = -1.0f;
     float endX = 1.0f;
-    float startY = -1.0f;
-    float endY = 1.0f;
     float resolution = 0.5f;
 
     while(r.isRunning()){
