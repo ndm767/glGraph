@@ -25,7 +25,7 @@ int main(int argc, char *argv[]){
     while(r.isRunning()){
         r.clear();
 
-        if(r.update(&currEq)){
+        if(r.update(&currEq, &resolution)){
             delete e;
             e = new Equation(currEq);
             if(currEq != ""){

@@ -35,8 +35,7 @@ Renderer::Renderer(){
     ImGui_ImplOpenGL3_Init();
     
     s = new Shader();
-    
-    resolution = 0.5f;
+
     yOffset = 0.0f;
 }
 
@@ -59,7 +58,7 @@ void Renderer::clear(){
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-bool Renderer::update(std::string *equ){
+bool Renderer::update(std::string *equ, float *resolution){
     bool ret = false;
 
     s->useProgram();
@@ -77,7 +76,7 @@ bool Renderer::update(std::string *equ){
     ImGui::InputTextWithHint("", "equation", eqBuf, IM_ARRAYSIZE(eqBuf));
     ImGui::Text("Resolution: ");
     ImGui::SameLine();
-    ImGui::InputFloat("r", &resolution);
+    ImGui::InputFloat("r", resolution);
     if(ImGui::Button("Graph")){
         *equ = std::string(eqBuf);
         ret = true;
