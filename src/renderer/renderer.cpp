@@ -35,6 +35,9 @@ Renderer::Renderer(){
     ImGui_ImplOpenGL3_Init();
     
     s = new Shader();
+    
+    resolution = 0.5f;
+    yOffset = 0.0f;
 }
 
 Renderer::~Renderer(){
@@ -56,7 +59,7 @@ void Renderer::clear(){
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-bool Renderer::update(float *startX, float *startY, float *endX, float *endY, float *resolution, std::string *equ){
+bool Renderer::update(std::string *equ){
     bool ret = false;
 
     s->useProgram();
@@ -74,11 +77,12 @@ bool Renderer::update(float *startX, float *startY, float *endX, float *endY, fl
     ImGui::InputTextWithHint("", "equation", eqBuf, IM_ARRAYSIZE(eqBuf));
     ImGui::Text("Resolution: ");
     ImGui::SameLine();
-    ImGui::InputFloat("r", resolution);
+    ImGui::InputFloat("r", &resolution);
     if(ImGui::Button("Graph")){
         *equ = std::string(eqBuf);
         ret = true;
     }
+    ImGui::Text("Camera Y: %f", -1.0f*yOffset);
     ImGui::End();
 
     ImGui::Render();
@@ -93,6 +97,23 @@ bool Renderer::update(float *startX, float *startY, float *endX, float *endY, fl
         }else if(e.type == SDL_KEYDOWN){
             if(e.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
                 running = false;
+            }else{
+
+                switch(e.key.keysym.scancode){
+                    case SDL_SCANCODE_UP:
+                    case SDL_SCANCODE_W:
+                        ret = true;
+                        yOffset -= 0.1f;
+                        break;
+                    case SDL_SCANCODE_DOWN:
+                    case SDL_SCANCODE_S:
+                        ret = true;
+                        yOffset += 0.1f;
+                        break;
+                    default:
+                        break;
+                }
+
             }
         }
     }
@@ -114,7 +135,7 @@ void Renderer::graphLine(std::map<float, float> points){
 
     for(auto [x, y] : points){
         verts.push_back(x);
-        verts.push_back(y);
+        verts.push_back(y + yOffset);
         verts.push_back(0.0f);
     }
 

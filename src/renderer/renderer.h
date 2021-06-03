@@ -20,7 +20,7 @@ public:
     bool isRunning(){ return running; }
 
     void clear();
-    bool update(float *startX, float *startY, float *endX, float *endY, float *resolution, std::string *equ);
+    bool update(std::string *equ);
 
     void graphPoint(float x, float y);
     void graphLine(std::map<float, float> points);
@@ -32,6 +32,10 @@ private:
 
     bool eqUpdate;
     char eqBuf[512];
+
+    float resolution;
+    float yOffset;
+    float xOffset;
 
     SDL_Window *gWindow;
     SDL_GLContext gContext;

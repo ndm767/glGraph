@@ -5,8 +5,8 @@
 
 Equation::Equation(std::string equation){
     origEq = parenEq(equation);
-    std::cout<<"Original: "<<equation<<std::endl;
-    std::cout<<"Paren'd: "<<origEq<<std::endl;
+    //std::cout<<"Original: "<<equation<<std::endl;
+    //std::cout<<"Paren'd: "<<origEq<<std::endl;
     baseUnit = new Unit(origEq);
 }
 

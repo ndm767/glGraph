@@ -11,6 +11,7 @@ int main(int argc, char *argv[]){
     //TODO: Actually make the thing graph
     //TODO: axis labeling
     //TODO: allow for multiple lines
+    //TODO: implement -x in equations
 
     std::string currEq = "";
     Equation *e = new Equation("");
@@ -26,7 +27,7 @@ int main(int argc, char *argv[]){
     while(r.isRunning()){
         r.clear();
 
-        if(r.update(&startX, &startY, &endX, &endY, &resolution, &currEq)){
+        if(r.update(&currEq)){
             delete e;
             e = new Equation(currEq);
             if(currEq != ""){
