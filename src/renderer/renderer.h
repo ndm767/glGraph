@@ -10,6 +10,7 @@
 #include "imgui/imgui_impl_opengl3.h"
 
 #include "shader.h"
+#include "line.h"
 
 class Renderer{
 public:
@@ -35,5 +36,7 @@ private:
     SDL_Window *gWindow;
     SDL_GLContext gContext;
 
-    Shader s;
+    Shader *s;
+    Line *l;
+    bool lineAct;
 };

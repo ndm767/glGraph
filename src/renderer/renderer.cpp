@@ -4,6 +4,7 @@
 
 Renderer::Renderer(){
     running = true;
+    lineAct = false;
 
     for(int i = 0; i<512; i++)
         eqBuf[i] = 0;
@@ -32,9 +33,15 @@ Renderer::Renderer(){
 
     ImGui_ImplSDL2_InitForOpenGL(gWindow, gContext);
     ImGui_ImplOpenGL3_Init();
+    
+    s = new Shader();
 }
 
 Renderer::~Renderer(){
+    delete s;
+    if(lineAct){
+        delete l;
+    }
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
@@ -52,7 +59,10 @@ void Renderer::clear(){
 bool Renderer::update(float *startX, float *startY, float *endX, float *endY, float *resolution, std::string *equ){
     bool ret = false;
 
-    s.useProgram();
+    s->useProgram();
+    if(lineAct){
+        l->draw();
+    }
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame(gWindow);
@@ -95,5 +105,19 @@ void Renderer::graphPoint(float x, float y){
 }
 
 void Renderer::graphLine(std::map<float, float> points){
+    if(lineAct){
+        delete l;
+    }
+    lineAct = true;
 
+    std::vector<float> verts;
+
+    for(auto [x, y] : points){
+        verts.push_back(x);
+        verts.push_back(y);
+        verts.push_back(0.0f);
+        std::cout<<x<<" "<<y<<std::endl;
+    }
+
+    l = new Line(verts);
 }

@@ -10,6 +10,7 @@ int main(int argc, char *argv[]){
     //TODO: support undefined behavior (divide by 0, etc)
     //TODO: Actually make the thing graph
     //TODO: axis labeling
+    //TODO: allow for multiple lines
 
     std::string currEq = "";
     Equation *e = new Equation("");
@@ -28,9 +29,12 @@ int main(int argc, char *argv[]){
         if(r.update(&startX, &startY, &endX, &endY, &resolution, &currEq)){
             delete e;
             e = new Equation(currEq);
-            std::map<float, float> r = e->exportRange(startX, endX, resolution);
-            for(auto [x, y] : r){
-                std::cout<<"x="<<x<<" "<<"y="<<y<<std::endl;
+            if(currEq != ""){
+                std::map<float, float> map = e->exportRange(startX, endX, resolution);
+                r.graphLine(map);
+                /*for(auto [x, y] : map){
+                    std::cout<<"x="<<x<<" "<<"y="<<y<<std::endl;
+                }*/
             }
         }
 
