@@ -2,142 +2,142 @@
 
 #include <iostream>
 
-Renderer::Renderer(){
-    running = true;
-    lineAct = false;
+Renderer::Renderer() {
+  running = true;
+  lineAct = false;
 
-    for(int i = 0; i<512; i++)
-        eqBuf[i] = 0;
-    
-    eqUpdate = false;
+  for (int i = 0; i < 512; i++)
+    eqBuf[i] = 0;
 
-    SDL_Init(SDL_INIT_VIDEO);
+  eqUpdate = false;
 
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+  SDL_Init(SDL_INIT_VIDEO);
 
-    gWindow = SDL_CreateWindow("glGraph", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screenWidth, screenHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
-    gContext = SDL_GL_CreateContext(gWindow);
-    SDL_GL_MakeCurrent(gWindow, gContext);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+  SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
-    glewExperimental = true;
-    glewInit();
+  gWindow = SDL_CreateWindow("glGraph", SDL_WINDOWPOS_CENTERED,
+                             SDL_WINDOWPOS_CENTERED, screenWidth, screenHeight,
+                             SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+  gContext = SDL_GL_CreateContext(gWindow);
+  SDL_GL_MakeCurrent(gWindow, gContext);
 
-    //Imgui stuff
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
+  glewExperimental = true;
+  glewInit();
 
-    ImGui::StyleColorsDark();
+  // Imgui stuff
+  IMGUI_CHECKVERSION();
+  ImGui::CreateContext();
+  ImGuiIO &io = ImGui::GetIO();
+  (void)io;
 
-    ImGui_ImplSDL2_InitForOpenGL(gWindow, gContext);
-    ImGui_ImplOpenGL3_Init();
-    
-    s = new Shader();
+  ImGui::StyleColorsDark();
 
-    yOffset = 0.0f;
+  ImGui_ImplSDL2_InitForOpenGL(gWindow, gContext);
+  ImGui_ImplOpenGL3_Init();
+
+  s = new Shader();
+
+  yOffset = 0.0f;
 }
 
-Renderer::~Renderer(){
-    delete s;
-    if(lineAct){
-        delete l;
-    }
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplSDL2_Shutdown();
-    ImGui::DestroyContext();
+Renderer::~Renderer() {
+  delete s;
+  if (lineAct) {
+    delete l;
+  }
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui_ImplSDL2_Shutdown();
+  ImGui::DestroyContext();
 
-    SDL_GL_DeleteContext(gContext);
-    SDL_DestroyWindow(gWindow);
-    SDL_Quit();
+  SDL_GL_DeleteContext(gContext);
+  SDL_DestroyWindow(gWindow);
+  SDL_Quit();
 }
 
-void Renderer::clear(){
-    glClearColor(0.1f, 0.2f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+void Renderer::clear() {
+  glClearColor(0.1f, 0.2f, 0.3f, 1.0f);
+  glClear(GL_COLOR_BUFFER_BIT);
 }
 
-bool Renderer::update(std::string *equ, float *resolution){
-    bool ret = false;
+bool Renderer::update(std::string *equ, float *resolution) {
+  bool ret = false;
 
-    s->useProgram();
-    if(lineAct){
-        l->draw();
-    }
+  s->useProgram();
+  if (lineAct) {
+    l->draw();
+  }
 
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplSDL2_NewFrame(gWindow);
-    ImGui::NewFrame();
+  ImGui_ImplOpenGL3_NewFrame();
+  ImGui_ImplSDL2_NewFrame(gWindow);
+  ImGui::NewFrame();
 
-    ImGui::Begin("Grapher");
-    ImGui::Text("Enter equation: ");
-    ImGui::SameLine();
-    ImGui::InputTextWithHint("", "equation", eqBuf, IM_ARRAYSIZE(eqBuf));
-    ImGui::Text("Resolution: ");
-    ImGui::SameLine();
-    ImGui::InputFloat("r", resolution);
-    if(ImGui::Button("Graph")){
-        *equ = std::string(eqBuf);
-        ret = true;
-    }
-    ImGui::Text("Camera Y: %f", -1.0f*yOffset);
-    ImGui::End();
+  ImGui::Begin("Grapher");
+  ImGui::Text("Enter equation: ");
+  ImGui::SameLine();
+  ImGui::InputTextWithHint("", "equation", eqBuf, IM_ARRAYSIZE(eqBuf));
+  ImGui::Text("Resolution: ");
+  ImGui::SameLine();
+  ImGui::InputFloat("r", resolution);
+  if (ImGui::Button("Graph")) {
+    *equ = std::string(eqBuf);
+    ret = true;
+  }
+  ImGui::Text("Camera Y: %f", -1.0f * yOffset);
+  ImGui::End();
 
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    SDL_GL_SwapWindow(gWindow);
+  ImGui::Render();
+  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+  SDL_GL_SwapWindow(gWindow);
 
-    SDL_Event e;
-    while(SDL_PollEvent(&e)){
-        ImGui_ImplSDL2_ProcessEvent(&e);
-        if(e.type == SDL_QUIT){
-            running = false;
-        }else if(e.type == SDL_KEYDOWN){
-            if(e.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
-                running = false;
-            }else{
+  SDL_Event e;
+  while (SDL_PollEvent(&e)) {
+    ImGui_ImplSDL2_ProcessEvent(&e);
+    if (e.type == SDL_QUIT) {
+      running = false;
+    } else if (e.type == SDL_KEYDOWN) {
+      if (e.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
+        running = false;
+      } else {
 
-                switch(e.key.keysym.scancode){
-                    case SDL_SCANCODE_UP:
-                    case SDL_SCANCODE_W:
-                        ret = true;
-                        yOffset -= 0.1f;
-                        break;
-                    case SDL_SCANCODE_DOWN:
-                    case SDL_SCANCODE_S:
-                        ret = true;
-                        yOffset += 0.1f;
-                        break;
-                    default:
-                        break;
-                }
-
-            }
+        switch (e.key.keysym.scancode) {
+        case SDL_SCANCODE_UP:
+        case SDL_SCANCODE_W:
+          ret = true;
+          yOffset -= 0.1f;
+          break;
+        case SDL_SCANCODE_DOWN:
+        case SDL_SCANCODE_S:
+          ret = true;
+          yOffset += 0.1f;
+          break;
+        default:
+          break;
         }
+      }
     }
+  }
 
-    return ret;
+  return ret;
 }
 
-void Renderer::graphPoint(float x, float y){
+void Renderer::graphPoint(float x, float y) {}
 
-}
+void Renderer::graphLine(std::map<float, float> points) {
+  if (lineAct) {
+    delete l;
+  }
+  lineAct = true;
 
-void Renderer::graphLine(std::map<float, float> points){
-    if(lineAct){
-        delete l;
-    }
-    lineAct = true;
+  std::vector<float> verts;
 
-    std::vector<float> verts;
+  for (auto [x, y] : points) {
+    verts.push_back(x);
+    verts.push_back(y + yOffset);
+    verts.push_back(0.0f);
+  }
 
-    for(auto [x, y] : points){
-        verts.push_back(x);
-        verts.push_back(y + yOffset);
-        verts.push_back(0.0f);
-    }
-
-    l = new Line(verts);
+  l = new Line(verts);
 }
