@@ -12,6 +12,10 @@ A 2d Graphing Calculator in Modern OpenGL
 - Basic operations (+, -, *, /, ^)
 - Order of operations (parentheses, etc)
 
+## Known issues
+
+- floating point errors
+
 ## Dependencies  
 
 - OpenGL 3.3 core
