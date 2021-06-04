@@ -1,24 +1,26 @@
 #pragma once
 
-#include <string>
-#include <memory>
 #include <map>
+#include <memory>
+#include <string>
 
 #include "unit.h"
 
-class Equation{
+class Equation {
 public:
-    Equation(std::string equation);
-    ~Equation();
+  Equation(std::string equation);
+  ~Equation();
 
-    float evalAtX(float x);
+  float evalAtX(float x);
 
-    std::map<float, float> exportRange(float startX, float endX, float resolution);
+  std::map<float, float> exportRange(float startX, float endX,
+                                     float resolution);
+
 private:
-    std::string origEq;
+  std::string origEq;
 
-    bool isOperator(char c);
-    std::string parenEq(std::string eq);
+  bool isOperator(char c);
+  std::string parenEq(std::string eq);
 
-    Unit *baseUnit;
+  Unit *baseUnit;
 };
