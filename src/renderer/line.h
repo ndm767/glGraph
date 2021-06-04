@@ -4,13 +4,14 @@
 
 #include <vector>
 
-class Line{
+class Line {
 public:
-    Line(std::vector<float> verts);
-    ~Line();
+  Line(std::vector<float> verts);
+  ~Line();
 
-    void draw();
+  void draw();
+
 private:
-    GLuint VAO, VBO;
-    std::vector<float> vertices;
+  GLuint VAO, VBO;
+  std::vector<float> vertices;
 };
