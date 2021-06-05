@@ -6,7 +6,6 @@
 int main(int argc, char *argv[]) {
 
   // TODO: support zoom
-  // TODO: support movement
   // TODO: support undefined behavior (divide by 0, etc)
   // TODO: axis labeling
   // TODO: allow for multiple lines
