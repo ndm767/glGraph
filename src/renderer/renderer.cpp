@@ -1,4 +1,5 @@
 #include "renderer.h"
+#include "imgui/imgui.h"
 
 #include <iostream>
 
@@ -43,6 +44,8 @@ Renderer::Renderer() {
   yOffset = 0.0f;
   xOffset = 0.0f;
 
+  showMouse = false;
+
   glLineWidth(4.0f);
 }
 
@@ -74,6 +77,8 @@ bool Renderer::update(float *startX, float *endX, std::string *equ,
     l->draw();
   }
 
+  SDL_GetMouseState(&mouseX, &mouseY);
+
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplSDL2_NewFrame(gWindow);
   ImGui::NewFrame();
@@ -91,6 +96,13 @@ bool Renderer::update(float *startX, float *endX, std::string *equ,
   }
   ImGui::Text("Camera Y: %f", -1.0f * yOffset);
   ImGui::Text("Camera X: %f", -1.0f * xOffset);
+  ImGui::Checkbox("Show mouse position", &showMouse);
+  if (showMouse) {
+    ImGui::Text("Mouse: (%f, %f)",
+                float(mouseX / float(screenWidth / 2.0f) - 1.0f) - xOffset,
+                float(-1.0f * (mouseY) / float(screenHeight / 2.0f) + 1.0f) -
+                    yOffset);
+  }
   ImGui::End();
 
   ImGui::Render();

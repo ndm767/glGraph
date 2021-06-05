@@ -36,6 +36,9 @@ private:
   float yOffset;
   float xOffset;
 
+  int mouseX, mouseY;
+  bool showMouse;
+
   SDL_Window *gWindow;
   SDL_GLContext gContext;
 
