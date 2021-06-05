@@ -23,14 +23,15 @@ int main(int argc, char *argv[]) {
   while (r.isRunning()) {
     r.clear();
 
-    if (r.update(&currEq, &resolution)) {
+    if (r.update(&startX, &endX, &currEq, &resolution)) {
       delete e;
       e = new Equation(currEq);
       if (currEq != "") {
         std::map<float, float> map = e->exportRange(startX, endX, resolution);
         r.graphLine(map);
-        /*for(auto [x, y] : map){
-            std::cout<<"x="<<x<<" "<<"y="<<y<<std::endl;
+        /*for (auto [x, y] : map) {
+          std::cout << "x=" << x << " "
+                    << "y=" << y << std::endl;
         }*/
       }
     }

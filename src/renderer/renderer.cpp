@@ -41,6 +41,7 @@ Renderer::Renderer() {
   s = new Shader();
 
   yOffset = 0.0f;
+  xOffset = 0.0f;
 }
 
 Renderer::~Renderer() {
@@ -62,7 +63,8 @@ void Renderer::clear() {
   glClear(GL_COLOR_BUFFER_BIT);
 }
 
-bool Renderer::update(std::string *equ, float *resolution) {
+bool Renderer::update(float *startX, float *endX, std::string *equ,
+                      float *resolution) {
   bool ret = false;
 
   s->useProgram();
@@ -86,6 +88,7 @@ bool Renderer::update(std::string *equ, float *resolution) {
     ret = true;
   }
   ImGui::Text("Camera Y: %f", -1.0f * yOffset);
+  ImGui::Text("Camera X: %f", -1.0f * xOffset);
   ImGui::End();
 
   ImGui::Render();
@@ -103,15 +106,25 @@ bool Renderer::update(std::string *equ, float *resolution) {
       } else {
 
         switch (e.key.keysym.scancode) {
-        case SDL_SCANCODE_UP:
         case SDL_SCANCODE_W:
           ret = true;
           yOffset -= 0.1f;
           break;
-        case SDL_SCANCODE_DOWN:
         case SDL_SCANCODE_S:
           ret = true;
           yOffset += 0.1f;
+          break;
+        case SDL_SCANCODE_A:
+          ret = true;
+          *startX -= 0.1f;
+          *endX -= 0.1f;
+          xOffset += 0.1f;
+          break;
+        case SDL_SCANCODE_D:
+          ret = true;
+          *startX += 0.1f;
+          *endX += 0.1f;
+          xOffset -= 0.1f;
           break;
         default:
           break;
@@ -134,7 +147,7 @@ void Renderer::graphLine(std::map<float, float> points) {
   std::vector<float> verts;
 
   for (auto [x, y] : points) {
-    verts.push_back(x);
+    verts.push_back(x + xOffset);
     verts.push_back(y + yOffset);
     verts.push_back(0.0f);
   }
