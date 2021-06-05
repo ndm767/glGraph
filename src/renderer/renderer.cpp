@@ -42,6 +42,8 @@ Renderer::Renderer() {
 
   yOffset = 0.0f;
   xOffset = 0.0f;
+
+  glLineWidth(4.0f);
 }
 
 Renderer::~Renderer() {
