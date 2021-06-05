@@ -76,7 +76,6 @@ bool Renderer::update(float *startX, float *endX, std::string *equ,
   if (lineAct) {
     l->draw();
   }
-
   SDL_GetMouseState(&mouseX, &mouseY);
 
   ImGui_ImplOpenGL3_NewFrame();

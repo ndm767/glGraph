@@ -5,8 +5,8 @@
 
 Equation::Equation(std::string equation) {
   origEq = parenEq(equation);
-  // std::cout<<"Original: "<<equation<<std::endl;
-  // std::cout<<"Paren'd: "<<origEq<<std::endl;
+  // std::cout << "Original: " << equation << std::endl;
+  // std::cout << "Paren'd: " << origEq << std::endl;
   baseUnit = new Unit(origEq);
 }
 
@@ -38,7 +38,6 @@ std::string Equation::parenEq(std::string eq) {
   for (auto it = eq.begin(); it < eq.end(); it++) {
     // x can only ever be by itself or with a negative sign
     if (*it == 'x') {
-      prevIsOp = false;
       if (curr == "-") {
         stepOneOut += "(-x)";
         curr = "";
@@ -50,18 +49,20 @@ std::string Equation::parenEq(std::string eq) {
         stepOneOut += "(x)";
       }
     } else if (!isOperator(*it)) {
-      prevIsOp = false;
       curr += *it;
     } else if (curr == "" && *it == '-' && prevIsOp) {
-      prevIsOp = false;
       curr += *it;
     } else {
       if (curr != "") {
         stepOneOut += "(" + curr + ")";
         curr = "";
       }
-      prevIsOp = true;
       stepOneOut += *it;
+    }
+    if (isOperator(*it) && *it != ' ') {
+      prevIsOp = true;
+    } else if (*it != ' ') {
+      prevIsOp = false;
     }
   }
   // catch potential last unit and clear curr for reuse
