@@ -9,6 +9,7 @@ int main(int argc, char *argv[]) {
   // TODO: axis labeling
   // TODO: allow for multiple lines
   // TODO: make variable line color
+  // TODO: add proper makefile
 
   std::string currEq = "";
   Equation *e = new Equation("");
