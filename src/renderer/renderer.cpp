@@ -7,9 +7,6 @@ Renderer::Renderer() {
   running = true;
   lineAct = false;
 
-  for (int i = 0; i < 512; i++)
-    eqBuf[i] = 0;
-
   eqUpdate = false;
 
   SDL_Init(SDL_INIT_VIDEO);
@@ -41,6 +38,11 @@ Renderer::Renderer() {
 
   s = new Shader();
 
+  numLines = 1;
+  eqBuf.push_back(new char[512]);
+  for (int i = 0; i < 512; i++) {
+    *(eqBuf.at(0) + i) = 0;
+  }
   yOffset = 0.0f;
   xOffset = 0.0f;
 
@@ -52,7 +54,12 @@ Renderer::Renderer() {
 Renderer::~Renderer() {
   delete s;
   if (lineAct) {
-    delete l;
+    for (int i = 0; i < lines.size(); i++) {
+      delete lines.at(i);
+    }
+  }
+  for (int i = 0; i < eqBuf.size(); i++) {
+    delete[] eqBuf.at(i);
   }
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplSDL2_Shutdown();
@@ -68,11 +75,13 @@ void Renderer::clear() {
   glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Renderer::update(float *xPos, float *scale, std::string *equ,
+void Renderer::update(float *xPos, float *scale, std::vector<std::string> *equs,
                       float *resolution, bool *updateEq, bool *updatePos) {
   s->useProgram();
   if (lineAct) {
-    l->draw();
+    for (auto l : lines) {
+      l->draw();
+    }
   }
   SDL_GetMouseState(&mouseX, &mouseY);
 
@@ -81,14 +90,28 @@ void Renderer::update(float *xPos, float *scale, std::string *equ,
   ImGui::NewFrame();
 
   ImGui::Begin("Grapher");
-  ImGui::Text("Enter equation: ");
-  ImGui::SameLine();
-  ImGui::InputTextWithHint("", "equation", eqBuf, IM_ARRAYSIZE(eqBuf));
   ImGui::Text("Resolution: ");
   ImGui::SameLine();
   ImGui::InputFloat("r", resolution);
+  ImGui::Text("Enter equations: ");
+  for (int i = 0; i < numLines; i++) {
+    ImGui::InputTextWithHint(std::to_string(i).c_str(), "equation", eqBuf.at(i),
+                             512);
+  }
+
+  if (ImGui::Button("Add line")) {
+    eqBuf.push_back(new char[512]);
+    for (int i = 0; i < 512; i++) {
+      *(eqBuf.at(eqBuf.size() - 1) + i) = 0;
+    }
+    equs->push_back("");
+    numLines++;
+  }
+  ImGui::SameLine();
   if (ImGui::Button("Graph")) {
-    *equ = std::string(eqBuf);
+    for (int i = 0; i < eqBuf.size(); i++) {
+      equs->at(i) = std::string(eqBuf.at(i));
+    }
     *updateEq = true;
     *updatePos = true;
   }
@@ -158,9 +181,9 @@ void Renderer::update(float *xPos, float *scale, std::string *equ,
 
 void Renderer::graphPoint(float x, float y) {}
 
-void Renderer::graphLine(std::map<float, float> points) {
-  if (lineAct) {
-    delete l;
+void Renderer::graphLine(std::map<float, float> points, int index) {
+  if (lineAct && index < lines.size()) {
+    delete lines.at(index);
   }
   lineAct = true;
 
@@ -169,14 +192,17 @@ void Renderer::graphLine(std::map<float, float> points) {
   int numPoints = points.size();
   float step = 2.0f / (numPoints - 1);
 
-  int index = 0;
+  int i = 0;
   for (auto [x, y] : points) {
     // verts.push_back(x + xOffset);
-    verts.push_back(index * step - 1.0f);
+    verts.push_back(i * step - 1.0f);
     verts.push_back(y + yOffset);
     verts.push_back(0.0f);
-    index++;
+    i++;
   }
-
-  l = new Line(verts);
+  if (index < lines.size()) {
+    lines.at(index) = new Line(verts);
+  } else {
+    lines.push_back(new Line(verts));
+  }
 }

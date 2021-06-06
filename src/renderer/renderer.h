@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <map>
 #include <string>
+#include <vector>
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_opengl3.h"
@@ -20,11 +21,11 @@ public:
   bool isRunning() { return running; }
 
   void clear();
-  void update(float *xPos, float *scale, std::string *equ, float *resolution,
-              bool *updateEq, bool *updatePos);
+  void update(float *xPos, float *scale, std::vector<std::string> *equs,
+              float *resolution, bool *updateEq, bool *updatePos);
 
   void graphPoint(float x, float y);
-  void graphLine(std::map<float, float> points);
+  void graphLine(std::map<float, float> points, int index);
 
 private:
   bool running;
@@ -32,7 +33,7 @@ private:
   int screenHeight = 480;
 
   bool eqUpdate;
-  char eqBuf[512];
+  std::vector<char *> eqBuf;
 
   float yOffset;
   float xOffset;
@@ -44,6 +45,7 @@ private:
   SDL_GLContext gContext;
 
   Shader *s;
-  Line *l;
+  std::vector<Line *> lines;
   bool lineAct;
+  int numLines;
 };

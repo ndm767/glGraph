@@ -6,12 +6,14 @@
 int main(int argc, char *argv[]) {
 
   // TODO: axis labeling
-  // TODO: allow for multiple lines
   // TODO: make variable line color
   // TODO: add proper makefile
+  // TODO: make it so not all equations update when you update a single equation
+  // TODO: add ability to remove lines
+  // TODO: add ability to put negative sign before parentheses
 
-  std::string currEq = "";
-  Equation *e = new Equation("");
+  std::vector<std::string> currEqs = {""};
+  std::vector<Equation *> eqs = {new Equation("")};
   Renderer r;
 
   // viewport controls
@@ -25,26 +27,37 @@ int main(int argc, char *argv[]) {
     bool updateEq = false;
     bool updatePos = false;
 
-    r.update(&xPos, &scale, &currEq, &resolution, &updateEq, &updatePos);
+    r.update(&xPos, &scale, &currEqs, &resolution, &updateEq, &updatePos);
 
     if (updateEq) {
-      delete e;
-      e = new Equation(currEq);
+      for (int i = 0; i < eqs.size(); i++) {
+        delete eqs.at(i);
+        eqs.at(i) = new Equation(currEqs.at(i));
+      }
+      if (currEqs.size() > eqs.size()) {
+        eqs.push_back(new Equation(currEqs.at(currEqs.size() - 1)));
+      }
     }
 
     if (updatePos) {
-      if (currEq != "") {
-        std::map<float, float> map = e->exportRange(xPos, scale, resolution);
-        r.graphLine(map);
-        /*for (auto [x, y] : map) {
-          std::cout << "x=" << x << " "
-                    << "y=" << y << std::endl;
-        }*/
+      int index = 0;
+      for (auto s : currEqs) {
+        if (s != "") {
+          std::map<float, float> map =
+              eqs.at(index)->exportRange(xPos, scale, resolution);
+          r.graphLine(map, index);
+          /*for (auto [x, y] : map) {
+            std::cout << "x=" << x << " "
+                      << "y=" << y << std::endl;
+          }*/
+        }
+        index++;
       }
     }
   }
 
-  delete e;
+  for (int i = 0; i < eqs.size(); i++)
+    delete eqs.at(i);
 
   return 0;
 }
