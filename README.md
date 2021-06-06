@@ -6,6 +6,7 @@ A 2d Graphing Calculator in Modern OpenGL
 
 - This has only been tested on Fedora 34, it should work on other OS's but I make no guarantees.  
 - This uses C++17 features.
+- Controls: WASD to move around, QE to zoom
 
 ## What can it do so far?
 
