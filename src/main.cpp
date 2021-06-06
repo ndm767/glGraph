@@ -12,6 +12,10 @@ int main(int argc, char *argv[]) {
   // TODO: add ability to remove lines
   // TODO: add ability to put negative sign before parentheses
   // TODO: add implied multiplication to parentheses
+  // TODO: add square root function
+  // TODO: add trigonometric functions
+  // TODO: add logarithms
+  // TODO: add "solve for x" type equations (like circle equations)
 
   std::vector<std::string> currEqs = {""};
   std::vector<Equation *> eqs = {new Equation("")};
