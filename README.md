@@ -1,6 +1,6 @@
 # glGraph
 
-A 2d Graphing Calculator in Modern OpenGL
+A 2d Graphing Calculator using Modern OpenGL
 
 ## Information
 
@@ -12,6 +12,7 @@ A 2d Graphing Calculator in Modern OpenGL
 
 - Basic operations (+, -, *, /, ^)
 - Order of operations (parentheses, etc)
+- Multiple Lines
 
 ## Known issues
 
