@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
   // viewport controls
   float startX = -1.0f;
   float endX = 1.0f;
-  float resolution = 0.5f;
+  float resolution = 0.1f;
 
   while (r.isRunning()) {
     r.clear();
