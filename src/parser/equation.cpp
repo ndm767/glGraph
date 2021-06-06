@@ -108,6 +108,8 @@ std::map<float, float> Equation::exportRange(float xPos, float dist,
   if (resolution == 0.0f)
     resolution = 0.1f;
 
+  resolution = resolution * dist;
+
   float startX = xPos - dist;
 
   // everything is multiplied by 10 to avoid error with floating point precision
