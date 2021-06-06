@@ -11,6 +11,7 @@ int main(int argc, char *argv[]) {
   // TODO: make it so not all equations update when you update a single equation
   // TODO: add ability to remove lines
   // TODO: add ability to put negative sign before parentheses
+  // TODO: add implied multiplication to parentheses
 
   std::vector<std::string> currEqs = {""};
   std::vector<Equation *> eqs = {new Equation("")};
