@@ -68,10 +68,8 @@ void Renderer::clear() {
   glClear(GL_COLOR_BUFFER_BIT);
 }
 
-bool Renderer::update(float *startX, float *endX, std::string *equ,
-                      float *resolution) {
-  bool ret = false;
-
+void Renderer::update(float *xPos, float *scale, std::string *equ,
+                      float *resolution, bool *updateEq, bool *updatePos) {
   s->useProgram();
   if (lineAct) {
     l->draw();
@@ -91,10 +89,12 @@ bool Renderer::update(float *startX, float *endX, std::string *equ,
   ImGui::InputFloat("r", resolution);
   if (ImGui::Button("Graph")) {
     *equ = std::string(eqBuf);
-    ret = true;
+    *updateEq = true;
+    *updatePos = true;
   }
   ImGui::Text("Camera Y: %f", -1.0f * yOffset);
   ImGui::Text("Camera X: %f", -1.0f * xOffset);
+  ImGui::Text("Scale: %f", *scale);
   ImGui::Checkbox("Show mouse position", &showMouse);
   if (showMouse) {
     ImGui::Text("Mouse: (%f, %f)",
@@ -120,24 +120,30 @@ bool Renderer::update(float *startX, float *endX, std::string *equ,
 
         switch (e.key.keysym.scancode) {
         case SDL_SCANCODE_W:
-          ret = true;
+          *updatePos = true;
           yOffset -= 0.1f;
           break;
         case SDL_SCANCODE_S:
-          ret = true;
+          *updatePos = true;
           yOffset += 0.1f;
           break;
         case SDL_SCANCODE_A:
-          ret = true;
-          *startX -= 0.1f;
-          *endX -= 0.1f;
+          *updatePos = true;
+          *xPos -= 0.1f;
           xOffset += 0.1f;
           break;
         case SDL_SCANCODE_D:
-          ret = true;
-          *startX += 0.1f;
-          *endX += 0.1f;
+          *updatePos = true;
+          *xPos += 0.1f;
           xOffset -= 0.1f;
+          break;
+        case SDL_SCANCODE_Q:
+          *updatePos = true;
+          *scale *= 1.1f;
+          break;
+        case SDL_SCANCODE_E:
+          *updatePos = true;
+          *scale /= 1.1f;
           break;
         default:
           break;
@@ -145,8 +151,9 @@ bool Renderer::update(float *startX, float *endX, std::string *equ,
       }
     }
   }
-
-  return ret;
+  if (*scale <= 0.0f) {
+    *scale = 0.1f;
+  }
 }
 
 void Renderer::graphPoint(float x, float y) {}
@@ -159,10 +166,16 @@ void Renderer::graphLine(std::map<float, float> points) {
 
   std::vector<float> verts;
 
+  int numPoints = points.size();
+  float step = 2.0f / (numPoints - 1);
+
+  int index = 0;
   for (auto [x, y] : points) {
-    verts.push_back(x + xOffset);
+    // verts.push_back(x + xOffset);
+    verts.push_back(index * step - 1.0f);
     verts.push_back(y + yOffset);
     verts.push_back(0.0f);
+    index++;
   }
 
   l = new Line(verts);

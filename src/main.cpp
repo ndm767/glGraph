@@ -5,28 +5,37 @@
 
 int main(int argc, char *argv[]) {
 
-  // TODO: support zoom
   // TODO: support undefined behavior (divide by 0, etc)
   // TODO: axis labeling
   // TODO: allow for multiple lines
+  // TODO: make variable line color
+  // TODO: make resolution change with scale
 
   std::string currEq = "";
   Equation *e = new Equation("");
   Renderer r;
 
   // viewport controls
-  float startX = -1.0f;
-  float endX = 1.0f;
+  float xPos = 0.0f;
   float resolution = 0.1f;
+  float scale = 1.0f;
 
   while (r.isRunning()) {
     r.clear();
 
-    if (r.update(&startX, &endX, &currEq, &resolution)) {
+    bool updateEq = false;
+    bool updatePos = false;
+
+    r.update(&xPos, &scale, &currEq, &resolution, &updateEq, &updatePos);
+
+    if (updateEq) {
       delete e;
       e = new Equation(currEq);
+    }
+
+    if (updatePos) {
       if (currEq != "") {
-        std::map<float, float> map = e->exportRange(startX, endX, resolution);
+        std::map<float, float> map = e->exportRange(xPos, scale, resolution);
         r.graphLine(map);
         /*for (auto [x, y] : map) {
           std::cout << "x=" << x << " "

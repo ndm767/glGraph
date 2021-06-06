@@ -101,17 +101,18 @@ std::string Equation::parenEq(std::string eq) {
   return stepThreeOut;
 }
 
-std::map<float, float> Equation::exportRange(float startX, float endX,
+std::map<float, float> Equation::exportRange(float xPos, float dist,
                                              float resolution) {
   std::map<float, float> ret;
 
   if (resolution == 0.0f)
     resolution = 0.1f;
 
+  float startX = xPos - dist;
+
   // everything is multiplied by 10 to avoid error with floating point precision
-  for (float i = startX * 10; i < endX * 10 + resolution * 10;
-       i += resolution * 10) {
-    ret[i / 10.0f] = evalAtX(i / 10.0f);
+  for (float i = 0; i <= dist * 20 + resolution * 10; i += resolution * 10) {
+    ret[startX + (i / 10.0f)] = evalAtX(startX + (i / 10.0f));
   }
   return ret;
 }

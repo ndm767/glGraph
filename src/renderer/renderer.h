@@ -20,7 +20,8 @@ public:
   bool isRunning() { return running; }
 
   void clear();
-  bool update(float *startX, float *endX, std::string *equ, float *resolution);
+  void update(float *xPos, float *scale, std::string *equ, float *resolution,
+              bool *updateEq, bool *updatePos);
 
   void graphPoint(float x, float y);
   void graphLine(std::map<float, float> points);
