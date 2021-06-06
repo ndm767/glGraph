@@ -48,4 +48,6 @@ private:
   std::vector<Line *> lines;
   bool lineAct;
   int numLines;
+  float newColor[3];
+  int lInd;
 };

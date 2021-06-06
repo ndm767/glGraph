@@ -12,7 +12,7 @@ A 2d Graphing Calculator using Modern OpenGL
 
 - Basic operations (+, -, *, /, ^)
 - Order of operations (parentheses, etc)
-- Multiple Lines
+- Multiple lines and ability to change line color
 
 ## Known issues
 

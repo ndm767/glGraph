@@ -46,6 +46,11 @@ Renderer::Renderer() {
   yOffset = 0.0f;
   xOffset = 0.0f;
 
+  newColor[0] = 0;
+  newColor[1] = 0;
+  newColor[2] = 0;
+  lInd = 0;
+
   showMouse = false;
 
   glLineWidth(4.0f);
@@ -80,6 +85,7 @@ void Renderer::update(float *xPos, float *scale, std::vector<std::string> *equs,
   s->useProgram();
   if (lineAct) {
     for (auto l : lines) {
+      s->setUniform3f("color", l->getColorR(), l->getColorB(), l->getColorG());
       l->draw();
     }
   }
@@ -92,7 +98,7 @@ void Renderer::update(float *xPos, float *scale, std::vector<std::string> *equs,
   ImGui::Begin("Grapher");
   ImGui::Text("Resolution: ");
   ImGui::SameLine();
-  ImGui::InputFloat("r", resolution);
+  ImGui::InputFloat("res", resolution);
   ImGui::Text("Enter equations: ");
   for (int i = 0; i < numLines; i++) {
     ImGui::InputTextWithHint(std::to_string(i).c_str(), "equation", eqBuf.at(i),
@@ -106,6 +112,8 @@ void Renderer::update(float *xPos, float *scale, std::vector<std::string> *equs,
     }
     equs->push_back("");
     numLines++;
+    *updateEq = true;
+    *updatePos = true;
   }
   ImGui::SameLine();
   if (ImGui::Button("Graph")) {
@@ -115,11 +123,25 @@ void Renderer::update(float *xPos, float *scale, std::vector<std::string> *equs,
     *updateEq = true;
     *updatePos = true;
   }
-  ImGui::Text("Camera Y: %f", -1.0f * yOffset);
-  ImGui::Text("Camera X: %f", -1.0f * xOffset);
-  ImGui::Text("Scale: %f", *scale);
-  ImGui::Checkbox("Show mouse position", &showMouse);
+  ImGui::Text("Line index:");
+  ImGui::SameLine();
+  ImGui::InputInt("", &lInd);
+  ImGui::Text("Input line color:");
+  /*ImGui::InputFloat("r", &newColor[0]);
+  ImGui::InputFloat("g", &newColor[1]);
+  ImGui::InputFloat("b", &newColor[2]);*/
+  ImGui::InputFloat3("rgb", newColor);
+  if (ImGui::Button("Update line color")) {
+    if (lInd < lines.size()) {
+      lines.at(lInd)->setColor(newColor[0], newColor[1], newColor[2]);
+    }
+  }
+  ImGui::Checkbox("Show stats", &showMouse);
   if (showMouse) {
+    ImGui::Text("Camera Y: %f", -1.0f * yOffset);
+    ImGui::Text("Camera X: %f", -1.0f * xOffset);
+    ImGui::Text("Scale: %f", *scale);
+
     ImGui::Text("Mouse: (%f, %f)",
                 float(mouseX / float(screenWidth / 2.0f) - 1.0f) - xOffset,
                 float(-1.0f * (mouseY) / float(screenHeight / 2.0f) + 1.0f) -
