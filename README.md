@@ -17,6 +17,7 @@ A 2d Graphing Calculator using Modern OpenGL
 ## Known issues
 
 - floating point errors
+- functions with undefined values sometimes display strange behavior
 
 ## Dependencies  
 
