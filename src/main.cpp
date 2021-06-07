@@ -16,7 +16,8 @@ int main(int argc, char *argv[]) {
   // TODO: add square root function
   // TODO: add trigonometric functions
   // TODO: add logarithms
-  // TODO: add "solve for x" type equations (like circle equations)
+  // TODO: add "solve for x" type equations (like circle equations) a.k.a add
+  // support for "=" sign
 
   std::vector<std::string> currEqs = {""};
   std::vector<Equation *> eqs = {new Equation("")};
