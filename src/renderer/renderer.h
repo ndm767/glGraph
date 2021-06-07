@@ -30,8 +30,8 @@ public:
 
 private:
   bool running;
-  int screenWidth = 640;
-  int screenHeight = 480;
+  int screenWidth = 1024;
+  int screenHeight = 600;
 
   bool eqUpdate;
   std::vector<char *> eqBuf;
