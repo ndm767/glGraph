@@ -22,7 +22,8 @@ public:
 
   void clear();
   void update(float *xPos, float *scale, std::vector<std::string> *equs,
-              float *resolution, bool *updateEq, bool *updatePos);
+              float *resolution, bool *scaleRes, bool *updateEq,
+              bool *updatePos);
 
   void graphPoint(float x, float y);
   void graphLine(std::map<float, float> points, int index);

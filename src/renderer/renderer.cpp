@@ -82,7 +82,8 @@ void Renderer::clear() {
 }
 
 void Renderer::update(float *xPos, float *scale, std::vector<std::string> *equs,
-                      float *resolution, bool *updateEq, bool *updatePos) {
+                      float *resolution, bool *scaleRes, bool *updateEq,
+                      bool *updatePos) {
   s->useProgram();
   if (lineAct) {
     for (auto l : lines) {
@@ -106,6 +107,7 @@ void Renderer::update(float *xPos, float *scale, std::vector<std::string> *equs,
   ImGui::Text("Resolution: ");
   ImGui::SameLine();
   ImGui::InputFloat("res", resolution);
+  ImGui::Checkbox("Scale Resolution", scaleRes);
   ImGui::Text("Enter equations: ");
   for (int i = 0; i < numLines; i++) {
     ImGui::InputTextWithHint(std::to_string(i).c_str(), "equation", eqBuf.at(i),

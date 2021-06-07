@@ -6,6 +6,7 @@
 int main(int argc, char *argv[]) {
 
   // TODO: axis labeling
+  // TODO: axis grid
   // TODO: add proper makefile
   // TODO: make it so not all equations update when you update a single equation
   // TODO: add ability to remove lines
@@ -15,7 +16,6 @@ int main(int argc, char *argv[]) {
   // TODO: add trigonometric functions
   // TODO: add logarithms
   // TODO: add "solve for x" type equations (like circle equations)
-  // TODO: add highlight for selected line
 
   std::vector<std::string> currEqs = {""};
   std::vector<Equation *> eqs = {new Equation("")};
@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
   float xPos = 0.0f;
   float resolution = 0.1f;
   float scale = 1.0f;
+  bool scaleRes = true;
 
   while (r.isRunning()) {
     r.clear();
@@ -32,7 +33,8 @@ int main(int argc, char *argv[]) {
     bool updateEq = false;
     bool updatePos = false;
 
-    r.update(&xPos, &scale, &currEqs, &resolution, &updateEq, &updatePos);
+    r.update(&xPos, &scale, &currEqs, &resolution, &scaleRes, &updateEq,
+             &updatePos);
 
     if (updateEq) {
       for (int i = 0; i < eqs.size(); i++) {
@@ -49,7 +51,7 @@ int main(int argc, char *argv[]) {
       for (auto s : currEqs) {
         if (s != "") {
           std::map<float, float> map =
-              eqs.at(index)->exportRange(xPos, scale, resolution);
+              eqs.at(index)->exportRange(xPos, scale, resolution, scaleRes);
           r.graphLine(map, index);
           /*for (auto [x, y] : map) {
             std::cout << "x=" << x << " "

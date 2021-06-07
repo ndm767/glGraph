@@ -102,13 +102,14 @@ std::string Equation::parenEq(std::string eq) {
 }
 
 std::map<float, float> Equation::exportRange(float xPos, float dist,
-                                             float resolution) {
+                                             float resolution, bool scaleRes) {
   std::map<float, float> ret;
 
   if (resolution == 0.0f)
     resolution = 0.1f;
 
-  resolution = resolution * dist;
+  if (scaleRes)
+    resolution = resolution * dist;
 
   float startX = xPos - dist;
 

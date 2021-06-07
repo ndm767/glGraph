@@ -13,7 +13,8 @@ public:
 
   float evalAtX(float x);
 
-  std::map<float, float> exportRange(float xPos, float dist, float resolution);
+  std::map<float, float> exportRange(float xPos, float dist, float resolution,
+                                     bool scaleRes);
 
 private:
   std::string origEq;
