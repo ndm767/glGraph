@@ -14,4 +14,7 @@ public:
 private:
   std::vector<Line *> vertLines;
   std::vector<Line *> horizLines;
+  Line *yAxis;
+  Line *xAxis;
+  bool xAct, yAct;
 };
