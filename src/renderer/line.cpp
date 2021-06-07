@@ -1,14 +1,25 @@
 #include "line.h"
 
+#include <iostream>
+
 Line::Line(std::vector<float> verts) {
   vertices = verts;
+  init();
+}
 
+Line::Line(float *verts, int numVerts) {
+  for (int i = 0; i < numVerts; i++) {
+    vertices.push_back(verts[i]);
+  }
+  init();
+}
+
+void Line::init() {
   color[0] = 1.0f;
   color[1] = 0.0f;
   color[2] = 0.0f;
 
   selected = false;
-
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
   glBindVertexArray(VAO);

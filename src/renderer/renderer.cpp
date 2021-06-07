@@ -37,6 +37,7 @@ Renderer::Renderer() {
   ImGui_ImplOpenGL3_Init();
 
   s = new Shader();
+  g = new Grid();
 
   numLines = 1;
   eqBuf.push_back(new char[512]);
@@ -59,6 +60,7 @@ Renderer::Renderer() {
 
 Renderer::~Renderer() {
   delete s;
+  delete g;
   if (lineAct) {
     for (int i = 0; i < lines.size(); i++) {
       delete lines.at(i);
@@ -85,6 +87,7 @@ void Renderer::update(float *xPos, float *scale, std::vector<std::string> *equs,
                       float *resolution, bool *scaleRes, bool *updateEq,
                       bool *updatePos) {
   s->useProgram();
+  g->renderGrid(s);
   if (lineAct) {
     for (auto l : lines) {
       if (l->isSelected()) {
@@ -214,6 +217,9 @@ void Renderer::update(float *xPos, float *scale, std::vector<std::string> *equs,
   }
   if (*scale <= 0.0f) {
     *scale = 0.1f;
+  }
+  if (*updatePos) {
+    g->updateGrid(xOffset, yOffset, *scale);
   }
 }
 

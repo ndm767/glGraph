@@ -18,6 +18,8 @@ int main(int argc, char *argv[]) {
   // TODO: add logarithms
   // TODO: add "solve for x" type equations (like circle equations) a.k.a add
   // support for "=" sign
+  // TODO: scale on the y-axis
+  // TODO: add variable movement speed
 
   std::vector<std::string> currEqs = {""};
   std::vector<Equation *> eqs = {new Equation("")};

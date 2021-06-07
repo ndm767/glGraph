@@ -10,6 +10,7 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_sdl.h"
 
+#include "grid.h"
 #include "line.h"
 #include "shader.h"
 
@@ -52,4 +53,6 @@ private:
   float newColor[3];
   int lInd;
   int currSel;
+
+  Grid *g;
 };
