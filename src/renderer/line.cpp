@@ -3,7 +3,7 @@
 Line::Line(std::vector<float> verts) {
   vertices = verts;
 
-  color[0] = 0.0f;
+  color[0] = 1.0f;
   color[1] = 0.0f;
   color[2] = 0.0f;
 

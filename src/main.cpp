@@ -15,6 +15,7 @@ int main(int argc, char *argv[]) {
   // TODO: add trigonometric functions
   // TODO: add logarithms
   // TODO: add "solve for x" type equations (like circle equations)
+  // TODO: add highlight for selected line
 
   std::vector<std::string> currEqs = {""};
   std::vector<Equation *> eqs = {new Equation("")};
