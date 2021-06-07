@@ -7,6 +7,7 @@ int main(int argc, char *argv[]) {
 
   // TODO: axis labeling
   // TODO: axis grid
+  // TODO: add ability to specify screen dimensions
   // TODO: add proper makefile
   // TODO: make it so not all equations update when you update a single equation
   // TODO: add ability to remove lines
