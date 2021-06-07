@@ -17,8 +17,12 @@ public:
 
   void setColor(float r, float g, float b);
 
+  bool isSelected() { return selected; }
+  void setSelected(bool val) { selected = val; }
+
 private:
   GLuint VAO, VBO;
   std::vector<float> vertices;
   float color[3];
+  bool selected;
 };

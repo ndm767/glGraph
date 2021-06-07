@@ -7,6 +7,8 @@ Line::Line(std::vector<float> verts) {
   color[1] = 0.0f;
   color[2] = 0.0f;
 
+  selected = false;
+
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
   glBindVertexArray(VAO);

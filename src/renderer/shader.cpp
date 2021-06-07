@@ -15,8 +15,9 @@ Shader::Shader() {
         #version 330 core
         out vec4 outColor;
 	uniform vec3 color;
+	uniform float opacity;
         void main(){
-            outColor = vec4(color, 1.0);
+            outColor = vec4(color, opacity);
         }
     )"";
 
@@ -62,4 +63,9 @@ void Shader::useProgram() { glUseProgram(shaderProgram); }
 void Shader::setUniform3f(const char *name, float one, float two, float three) {
   GLuint loc = glGetUniformLocation(shaderProgram, name);
   glUniform3f(loc, one, two, three);
+}
+
+void Shader::setUniform1f(const char *name, float val) {
+  GLuint loc = glGetUniformLocation(shaderProgram, name);
+  glUniform1f(loc, val);
 }

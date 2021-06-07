@@ -50,4 +50,5 @@ private:
   int numLines;
   float newColor[3];
   int lInd;
+  int currSel;
 };

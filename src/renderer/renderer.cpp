@@ -50,6 +50,7 @@ Renderer::Renderer() {
   newColor[1] = 0;
   newColor[2] = 0;
   lInd = 0;
+  currSel = -1;
 
   showMouse = false;
 
@@ -85,7 +86,13 @@ void Renderer::update(float *xPos, float *scale, std::vector<std::string> *equs,
   s->useProgram();
   if (lineAct) {
     for (auto l : lines) {
-      s->setUniform3f("color", l->getColorR(), l->getColorB(), l->getColorG());
+      if (l->isSelected()) {
+        s->setUniform3f("color", 1.0f, 1.0f, 0.0f);
+        glLineWidth(8.0f);
+        l->draw();
+        glLineWidth(4.0f);
+      }
+      s->setUniform3f("color", l->getColorR(), l->getColorG(), l->getColorB());
       l->draw();
     }
   }
@@ -126,15 +133,22 @@ void Renderer::update(float *xPos, float *scale, std::vector<std::string> *equs,
   ImGui::Text("Line index:");
   ImGui::SameLine();
   ImGui::InputInt("", &lInd);
+  if (lInd < 0)
+    lInd = 0;
+  if (lInd >= lines.size())
+    lInd = lines.size() - 1;
+  if (currSel != lInd) {
+    if (lines.size() > 0) {
+      if (currSel != -1)
+        lines.at(currSel)->setSelected(false);
+      currSel = lInd;
+      lines.at(currSel)->setSelected(true);
+    }
+  }
   ImGui::Text("Input line color:");
-  /*ImGui::InputFloat("r", &newColor[0]);
-  ImGui::InputFloat("g", &newColor[1]);
-  ImGui::InputFloat("b", &newColor[2]);*/
   ImGui::InputFloat3("rgb", newColor);
   if (ImGui::Button("Update line color")) {
-    if (lInd < lines.size()) {
-      lines.at(lInd)->setColor(newColor[0], newColor[1], newColor[2]);
-    }
+    lines.at(lInd)->setColor(newColor[0], newColor[1], newColor[2]);
   }
   ImGui::Checkbox("Show stats", &showMouse);
   if (showMouse) {
@@ -204,7 +218,9 @@ void Renderer::update(float *xPos, float *scale, std::vector<std::string> *equs,
 void Renderer::graphPoint(float x, float y) {}
 
 void Renderer::graphLine(std::map<float, float> points, int index) {
+  bool select = false;
   if (lineAct && index < lines.size()) {
+    select = lines.at(index)->isSelected();
     delete lines.at(index);
   }
   lineAct = true;
@@ -224,6 +240,7 @@ void Renderer::graphLine(std::map<float, float> points, int index) {
   }
   if (index < lines.size()) {
     lines.at(index) = new Line(verts);
+    lines.at(index)->setSelected(select);
   } else {
     lines.push_back(new Line(verts));
   }
