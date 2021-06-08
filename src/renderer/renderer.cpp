@@ -236,7 +236,7 @@ void Renderer::graphLine(std::map<float, float> points, int index) {
   std::vector<float> verts;
 
   int numPoints = points.size();
-  float step = 2.0f / (numPoints - 1);
+  float step = 2.0f / (numPoints - 2);
 
   int i = 0;
   for (auto [x, y] : points) {
