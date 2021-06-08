@@ -20,7 +20,6 @@ int main(int argc, char *argv[]) {
   // support for "=" sign
   // TODO: scale on the y-axis
   // TODO: add variable movement speed
-  // TODO: fix glitch where line color disappears upon movement
 
   std::vector<std::string> currEqs = {""};
   std::vector<Equation *> eqs = {new Equation("")};
