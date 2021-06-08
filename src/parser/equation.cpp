@@ -1,6 +1,7 @@
 #include "equation.h"
 #include "unit.h"
 
+#include <cmath>
 #include <iostream>
 
 Equation::Equation(std::string equation) {
@@ -109,7 +110,7 @@ std::map<float, float> Equation::exportRange(float xPos, float dist,
     resolution = 0.1f;
 
   if (scaleRes)
-    resolution = resolution * dist;
+    resolution = resolution * pow(dist, 0.5f);
 
   float startX = xPos - dist;
 
