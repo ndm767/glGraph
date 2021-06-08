@@ -225,7 +225,8 @@ void Renderer::update(float *xPos, float *scale, std::vector<std::string> *equs,
 
 void Renderer::graphPoint(float x, float y) {}
 
-void Renderer::graphLine(std::map<float, float> points, int index) {
+void Renderer::graphLine(std::map<float, float> points, int index,
+                         float scale) {
   bool select = false;
   float color[3] = {1.0f, 0.0f, 0.0f};
   if (lineAct && index < lines.size()) {
@@ -246,7 +247,7 @@ void Renderer::graphLine(std::map<float, float> points, int index) {
   for (auto [x, y] : points) {
     // verts.push_back(x + xOffset);
     verts.push_back(i * step - 1.0f);
-    verts.push_back(y + yOffset);
+    verts.push_back(y / scale + yOffset);
     verts.push_back(0.0f);
     i++;
   }

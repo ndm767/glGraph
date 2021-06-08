@@ -18,7 +18,6 @@ int main(int argc, char *argv[]) {
   // TODO: add logarithms
   // TODO: add "solve for x" type equations (like circle equations) a.k.a add
   // support for "=" sign
-  // TODO: scale on the y-axis
   // TODO: add variable movement speed
   // TODO: don't render lines that are completely off screen
 
@@ -57,7 +56,7 @@ int main(int argc, char *argv[]) {
         if (s != "") {
           std::map<float, float> map =
               eqs.at(index)->exportRange(xPos, scale, resolution, scaleRes);
-          r.graphLine(map, index);
+          r.graphLine(map, index, scale);
           /*for (auto [x, y] : map) {
             std::cout << "x=" << x << " "
                       << "y=" << y << std::endl;

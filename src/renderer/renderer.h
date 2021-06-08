@@ -27,7 +27,7 @@ public:
               bool *updatePos);
 
   void graphPoint(float x, float y);
-  void graphLine(std::map<float, float> points, int index);
+  void graphLine(std::map<float, float> points, int index, float scale);
 
 private:
   bool running;
