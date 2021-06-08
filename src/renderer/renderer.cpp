@@ -227,8 +227,12 @@ void Renderer::graphPoint(float x, float y) {}
 
 void Renderer::graphLine(std::map<float, float> points, int index) {
   bool select = false;
+  float color[3] = {1.0f, 0.0f, 0.0f};
   if (lineAct && index < lines.size()) {
     select = lines.at(index)->isSelected();
+    color[0] = lines.at(index)->getColorR();
+    color[1] = lines.at(index)->getColorG();
+    color[2] = lines.at(index)->getColorB();
     delete lines.at(index);
   }
   lineAct = true;
@@ -249,7 +253,9 @@ void Renderer::graphLine(std::map<float, float> points, int index) {
   if (index < lines.size()) {
     lines.at(index) = new Line(verts);
     lines.at(index)->setSelected(select);
+    lines.at(index)->setColor(color[0], color[1], color[2]);
   } else {
     lines.push_back(new Line(verts));
+    lines.at(lines.size() - 1)->setColor(color[0], color[1], color[2]);
   }
 }
