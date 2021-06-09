@@ -87,7 +87,7 @@ float Unit::evalUnit(float x) {
 
   // return if just number
   std::smatch m;
-  std::regex isNum("^(\\d*)(.?)(\\d*)$");
+  std::regex isNum("(\\d*)(.?)(\\d*)");
   if (std::regex_match(uString, m, isNum)) {
     return atof(m[0].str().c_str());
   }
