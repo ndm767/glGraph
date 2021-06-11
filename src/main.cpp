@@ -20,7 +20,6 @@ int main(int argc, char *argv[]) {
   // support for "=" sign
   // TODO: add variable movement speed
   // TODO: don't render lines that are completely off screen
-  // TODO: switch non-color floats to doubles
   // TODO: investigate using compute shader
   // TODO: change movement to be more manageable
 
@@ -29,9 +28,9 @@ int main(int argc, char *argv[]) {
   Renderer r;
 
   // viewport controls
-  float xPos = 0.0f;
-  float resolution = 0.1f;
-  float scale = 1.0f;
+  double xPos = 0.0f;
+  double resolution = 0.1f;
+  double scale = 1.0f;
   bool scaleRes = true;
 
   while (r.isRunning()) {
@@ -57,7 +56,7 @@ int main(int argc, char *argv[]) {
       int index = 0;
       for (auto s : currEqs) {
         if (s != "") {
-          std::map<float, float> map =
+          std::map<double, double> map =
               eqs.at(index)->exportRange(xPos, scale, resolution, scaleRes);
           r.graphLine(map, index, scale);
           /*for (auto [x, y] : map) {

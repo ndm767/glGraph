@@ -20,7 +20,7 @@ Grid::~Grid() {
   }
 }
 
-void Grid::updateGrid(float xOffset, float yOffset, float scale) {
+void Grid::updateGrid(double xOffset, double yOffset, double scale) {
   for (int i = 0; i < horizLines.size(); i++) {
     delete horizLines.at(i);
   }
@@ -28,8 +28,8 @@ void Grid::updateGrid(float xOffset, float yOffset, float scale) {
 
   if (xAct)
     delete xAxis;
-  float x = (0.0f + xOffset) / scale;
-  float v[] = {x, 1.0f, 0.0f, x, -1.0f, 0.0f};
+  double x = (0.0f + xOffset) / scale;
+  double v[] = {x, 1.0f, 0.0f, x, -1.0f, 0.0f};
   xAxis = new Line(v, 6);
   xAct = true;
 
@@ -40,8 +40,8 @@ void Grid::updateGrid(float xOffset, float yOffset, float scale) {
 
   if (yAct)
     delete yAxis;
-  float y = (0.0f + yOffset);
-  float vy[] = {-1.0f, y, 0.0f, 1.0f, y, 0.0f};
+  double y = (0.0f + yOffset);
+  double vy[] = {-1.0f, y, 0.0f, 1.0f, y, 0.0f};
   yAxis = new Line(vy, 6);
   yAct = true;
 }

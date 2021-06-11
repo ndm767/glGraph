@@ -11,10 +11,10 @@ public:
   Equation(std::string equation);
   ~Equation();
 
-  float evalAtX(float x);
+  double evalAtX(double x);
 
-  std::map<float, float> exportRange(float xPos, float dist, float resolution,
-                                     bool scaleRes);
+  std::map<double, double> exportRange(double xPos, double dist,
+                                       double resolution, bool scaleRes);
 
 private:
   std::string origEq;

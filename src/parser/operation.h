@@ -6,7 +6,7 @@ class Operation {
 public:
   Operation(char op);
   ~Operation();
-  float performOperation(float lhs, float rhs);
+  double performOperation(double lhs, double rhs);
   char getOp() { return op; }
 
 private:

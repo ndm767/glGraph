@@ -6,8 +6,8 @@
 
 class Line {
 public:
-  Line(std::vector<float> verts);
-  Line(float *verts, int numVerts);
+  Line(std::vector<double> verts);
+  Line(double *verts, int numVerts);
   ~Line();
 
   void draw();
@@ -25,7 +25,7 @@ private:
   void init();
 
   GLuint VAO, VBO;
-  std::vector<float> vertices;
+  std::vector<double> vertices;
   float color[3];
   bool selected;
 };

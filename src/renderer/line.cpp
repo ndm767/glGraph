@@ -2,12 +2,12 @@
 
 #include <iostream>
 
-Line::Line(std::vector<float> verts) {
+Line::Line(std::vector<double> verts) {
   vertices = verts;
   init();
 }
 
-Line::Line(float *verts, int numVerts) {
+Line::Line(double *verts, int numVerts) {
   for (int i = 0; i < numVerts; i++) {
     vertices.push_back(verts[i]);
   }
@@ -24,8 +24,8 @@ void Line::init() {
   glGenBuffers(1, &VBO);
   glBindVertexArray(VAO);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *)0);
-  glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float),
+  glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, 0, (void *)0);
+  glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(double),
                vertices.data(), GL_DYNAMIC_DRAW);
   glEnableVertexAttribArray(0);
 }

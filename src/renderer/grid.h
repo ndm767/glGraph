@@ -8,7 +8,7 @@ public:
   Grid();
   ~Grid();
 
-  void updateGrid(float xOffset, float yOffset, float scale);
+  void updateGrid(double xOffset, double yOffset, double scale);
   void renderGrid(Shader *s);
 
 private:

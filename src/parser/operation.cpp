@@ -6,7 +6,7 @@ Operation::Operation(char op) { this->op = op; }
 
 Operation::~Operation() {}
 
-float Operation::performOperation(float lhs, float rhs) {
+double Operation::performOperation(double lhs, double rhs) {
   switch (op) {
   case '+':
     return lhs + rhs;

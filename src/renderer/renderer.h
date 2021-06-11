@@ -22,12 +22,12 @@ public:
   bool isRunning() { return running; }
 
   void clear();
-  void update(float *xPos, float *scale, std::vector<std::string> *equs,
-              float *resolution, bool *scaleRes, bool *updateEq,
+  void update(double *xPos, double *scale, std::vector<std::string> *equs,
+              double *resolution, bool *scaleRes, bool *updateEq,
               bool *updatePos);
 
-  void graphPoint(float x, float y);
-  void graphLine(std::map<float, float> points, int index, float scale);
+  void graphPoint(double x, double y);
+  void graphLine(std::map<double, double> points, int index, double scale);
 
 private:
   bool running;
@@ -37,8 +37,8 @@ private:
   bool eqUpdate;
   std::vector<char *> eqBuf;
 
-  float yOffset;
-  float xOffset;
+  double yOffset;
+  double xOffset;
 
   int mouseX, mouseY;
   bool showMouse;

@@ -83,9 +83,9 @@ void Renderer::clear() {
   glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Renderer::update(float *xPos, float *scale, std::vector<std::string> *equs,
-                      float *resolution, bool *scaleRes, bool *updateEq,
-                      bool *updatePos) {
+void Renderer::update(double *xPos, double *scale,
+                      std::vector<std::string> *equs, double *resolution,
+                      bool *scaleRes, bool *updateEq, bool *updatePos) {
   s->useProgram();
   g->renderGrid(s);
   if (lineAct) {
@@ -109,7 +109,7 @@ void Renderer::update(float *xPos, float *scale, std::vector<std::string> *equs,
   ImGui::Begin("Grapher");
   ImGui::Text("Resolution: ");
   ImGui::SameLine();
-  ImGui::InputFloat("res", resolution);
+  ImGui::InputDouble("res", resolution);
   ImGui::Checkbox("Scale Resolution", scaleRes);
   ImGui::Text("Enter equations: ");
   for (int i = 0; i < numLines; i++) {
@@ -162,8 +162,8 @@ void Renderer::update(float *xPos, float *scale, std::vector<std::string> *equs,
     ImGui::Text("Scale: %f", *scale);
 
     ImGui::Text("Mouse: (%f, %f)",
-                float(mouseX / float(screenWidth / 2.0f) - 1.0f) - xOffset,
-                float(-1.0f * (mouseY) / float(screenHeight / 2.0f) + 1.0f) -
+                double(mouseX / double(screenWidth / 2.0f) - 1.0f) - xOffset,
+                double(-1.0f * (mouseY) / double(screenHeight / 2.0f) + 1.0f) -
                     yOffset);
   }
   ImGui::End();
@@ -223,10 +223,10 @@ void Renderer::update(float *xPos, float *scale, std::vector<std::string> *equs,
   }
 }
 
-void Renderer::graphPoint(float x, float y) {}
+void Renderer::graphPoint(double x, double y) {}
 
-void Renderer::graphLine(std::map<float, float> points, int index,
-                         float scale) {
+void Renderer::graphLine(std::map<double, double> points, int index,
+                         double scale) {
   bool select = false;
   float color[3] = {1.0f, 0.0f, 0.0f};
   if (lineAct && index < lines.size()) {
@@ -238,10 +238,10 @@ void Renderer::graphLine(std::map<float, float> points, int index,
   }
   lineAct = true;
 
-  std::vector<float> verts;
+  std::vector<double> verts;
 
   int numPoints = points.size();
-  float step = 2.0f / (numPoints - 2);
+  double step = 2.0f / (numPoints - 2);
 
   int i = 0;
   for (auto [x, y] : points) {

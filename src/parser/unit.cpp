@@ -45,18 +45,18 @@ Unit::Unit(std::string unitString) {
 
 Unit::~Unit() {}
 
-void Unit::performOps(std::vector<std::variant<Operation, float>> &transformed,
+void Unit::performOps(std::vector<std::variant<Operation, double>> &transformed,
                       char op1, char op2) {
   int index = 0;
   for (auto t : transformed) {
     if (std::holds_alternative<Operation>(t)) {
       Operation o = std::get<Operation>(t);
       if (o.getOp() == op1 || o.getOp() == op2) {
-        // TODO: Check if these are actually floats
-        float lhs, rhs;
-        lhs = std::get<float>(transformed.at(index - 1));
-        rhs = std::get<float>(transformed.at(index + 1));
-        float temp = o.performOperation(lhs, rhs);
+        // TODO: Check if these are actually doubles
+        double lhs, rhs;
+        lhs = std::get<double>(transformed.at(index - 1));
+        rhs = std::get<double>(transformed.at(index + 1));
+        double temp = o.performOperation(lhs, rhs);
         auto er = transformed.begin() + index - 1;
         transformed.erase(er);
         transformed.erase(er);
@@ -68,16 +68,16 @@ void Unit::performOps(std::vector<std::variant<Operation, float>> &transformed,
   }
 }
 
-std::vector<std::variant<Operation, float>>
-Unit::transformUnit(std::vector<std::variant<Operation, float>> input) {
-  std::vector<std::variant<Operation, float>> t = input;
+std::vector<std::variant<Operation, double>>
+Unit::transformUnit(std::vector<std::variant<Operation, double>> input) {
+  std::vector<std::variant<Operation, double>> t = input;
   performOps(t, '^', ' ');
   performOps(t, '*', '/');
   performOps(t, '+', '-');
   return t;
 }
 
-float Unit::evalUnit(float x) {
+double Unit::evalUnit(double x) {
   // return if it is just x
   if (uString == "x") {
     return x;
@@ -92,13 +92,13 @@ float Unit::evalUnit(float x) {
     return atof(m[0].str().c_str());
   }
 
-  std::vector<std::variant<Operation, float>> transformed;
+  std::vector<std::variant<Operation, double>> transformed;
 
   for (auto p : parts) {
     if (std::holds_alternative<Unit>(p)) {
       transformed.push_back(std::get<Unit>(p).evalUnit(x));
-    } else if (std::holds_alternative<float>(p)) {
-      transformed.push_back(std::get<float>(p));
+    } else if (std::holds_alternative<double>(p)) {
+      transformed.push_back(std::get<double>(p));
     } else if (std::holds_alternative<Operation>(p)) {
       transformed.push_back(std::get<Operation>(p));
     }
@@ -109,8 +109,8 @@ float Unit::evalUnit(float x) {
   }
 
   // return the number if it is just a number
-  if (std::holds_alternative<float>(transformed.at(0))) {
-    return std::get<float>(transformed.at(0));
+  if (std::holds_alternative<double>(transformed.at(0))) {
+    return std::get<double>(transformed.at(0));
   }
   return 0;
 }

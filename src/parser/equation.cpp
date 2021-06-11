@@ -13,7 +13,7 @@ Equation::Equation(std::string equation) {
 
 Equation::~Equation() { delete baseUnit; }
 
-float Equation::evalAtX(float x) { return baseUnit->evalUnit(x); }
+double Equation::evalAtX(double x) { return baseUnit->evalUnit(x); }
 
 bool Equation::isOperator(char c) {
   switch (c) {
@@ -102,9 +102,10 @@ std::string Equation::parenEq(std::string eq) {
   return stepThreeOut;
 }
 
-std::map<float, float> Equation::exportRange(float xPos, float dist,
-                                             float resolution, bool scaleRes) {
-  std::map<float, float> ret;
+std::map<double, double> Equation::exportRange(double xPos, double dist,
+                                               double resolution,
+                                               bool scaleRes) {
+  std::map<double, double> ret;
 
   if (resolution == 0.0f)
     resolution = 0.1f;
@@ -112,10 +113,10 @@ std::map<float, float> Equation::exportRange(float xPos, float dist,
   if (scaleRes)
     resolution = resolution * pow(dist, 0.5f);
 
-  float startX = xPos - dist;
+  double startX = xPos - dist;
 
   // everything is multiplied by 10 to avoid error with floating point precision
-  for (float i = 0; i <= dist * 20 + resolution * 10; i += resolution * 10) {
+  for (double i = 0; i <= dist * 20 + resolution * 10; i += resolution * 10) {
     ret[startX + (i / 10.0f)] = evalAtX(startX + (i / 10.0f));
   }
   return ret;
