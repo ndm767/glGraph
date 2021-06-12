@@ -20,6 +20,7 @@ A 2d Graphing Calculator using Modern OpenGL
 - floating point errors
 - functions with undefined values (e.g. divides by 0 or goes to infinity) sometimes display strange behavior
 - glLineWidth may not work on some (maybe all) versions of macOS because of limited GL_LINE_WIDTH_RANGE  
+- expressions inside of functions may cause crashes
 
 ## Dependencies  
 
