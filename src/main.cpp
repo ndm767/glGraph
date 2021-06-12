@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
   // TODO: change movement to be more manageable
   // TODO: fix sqrt(x^2) crash
   // TODO: allow switching between radians and degrees
-  //
+  // TODO: make it so unit isn't completely reevaluated every time
 
   std::vector<std::string> currEqs = {""};
   std::vector<Equation *> eqs = {new Equation("")};
