@@ -1,116 +1,177 @@
 #include "unit.h"
 
+#include <algorithm>
 #include <iostream>
 #include <regex>
 
-Unit::Unit(std::string unitString) {
-  int parenDepth = 0;
-  uString = unitString;
-  std::string curr = "";
-  for (auto c = unitString.begin(); c < unitString.end(); c++) {
-    if (*c == '(') {
-      if (parenDepth != 0) {
-        curr += *c;
+bool Unit::isOperator(char c) {
+  switch (c) {
+  case '+':
+  case '-':
+  case '/':
+  case '*':
+  case '^':
+    return true;
+  default:
+    return false;
+  }
+}
+
+Unit::Unit(std::string eq) {
+  eqStr = eq;
+  modExp = false;
+  if (eq.size() >= 3) {
+    if (eq.at(0) == 's' || eq.at(0) == 't' || eq.at(0) == 'c') {
+      modExp = true;
+    }
+  }
+  if (modExp) {
+    mod t = mod::NONE;
+    int subPos = 3;
+    switch (eq.at(1)) {
+    case 'q':
+      t = mod::SQRT;
+      subPos = 4;
+      break;
+    case 'i':
+      t = mod::SIN;
+      break;
+    case 'o':
+      t = mod::COS;
+      break;
+    case 'a':
+      t = mod::TAN;
+      break;
+    }
+    Modulator temp;
+    temp.setM(t);
+    modUnit =
+        std::make_pair(temp, new Unit(eq.substr(subPos, eq.length() - subPos)));
+  } else {
+    int parenDepth = 0;
+    std::string curr = "";
+    for (auto c : eq) {
+      if (c == '(') {
+        parenDepth++;
+      } else if (c == ')') {
+        parenDepth--;
       }
-      parenDepth++;
-    } else if (*c == ')') {
-      if (parenDepth > 1) {
-        curr += *c;
+      if (parenDepth == 0) {
+        if (curr != "") {
+          Unit temp(curr);
+          exp.push_back(temp);
+          curr = "";
+        }
+        if (isOperator(c)) {
+          Operator o(c);
+          exp.push_back(o);
+        }
       } else {
-        Unit temp(curr);
-        parts.push_back(temp);
-        curr = "";
+        if (!(parenDepth == 1 && c == '(')) {
+          curr += c;
+        }
       }
-      parenDepth--;
-    } else if (parenDepth == 0) {
-      switch (*c) {
-      case '+':
-      case '-':
-      case '*':
-      case '/':
-      case ' ':
-      case '^': {
-        Operation temp(*c);
-        parts.push_back(temp);
-      } break;
-      default:
-        curr += *c;
-        break;
-      }
-    } else {
-      curr += *c;
     }
   }
 }
 
 Unit::~Unit() {}
 
-void Unit::performOps(std::vector<std::variant<Operation, double>> &transformed,
-                      char op1, char op2) {
-  int index = 0;
-  for (auto t : transformed) {
-    if (std::holds_alternative<Operation>(t)) {
-      Operation o = std::get<Operation>(t);
-      if (o.getOp() == op1 || o.getOp() == op2) {
-        // TODO: Check if these are actually doubles
-        double lhs, rhs;
-        lhs = std::get<double>(transformed.at(index - 1));
-        rhs = std::get<double>(transformed.at(index + 1));
-        double temp = o.performOperation(lhs, rhs);
-        auto er = transformed.begin() + index - 1;
-        transformed.erase(er);
-        transformed.erase(er);
-        transformed.erase(er);
-        transformed.insert(er, temp);
+double Unit::evalUnit(double x) {
+  // std::cout << eqStr << std::endl;
+  if (modExp) {
+    double val = modUnit.second->evalUnit(x);
+    return modUnit.first.applyMod(val);
+  } else {
+    // return if its just x
+    if (eqStr == "x") {
+      return x;
+    }
+    // return if its just a number
+    std::smatch match;
+    std::regex isNum("^(\\d*)(.?)(\\d*)$");
+    if (std::regex_match(eqStr, match, isNum)) {
+      return atof(match[0].str().c_str());
+    }
+    // otherwise evaluate expression
+    std::vector<std::variant<double, Operator>> opVec;
+    for (auto i : exp) {
+      if (std::holds_alternative<Unit>(i)) {
+        opVec.push_back(std::get<Unit>(i).evalUnit(x));
+      } else if (std::holds_alternative<Operator>(i)) {
+        opVec.push_back(std::get<Operator>(i));
+      } else if (std::holds_alternative<double>(i)) {
+        opVec.push_back(std::get<double>(i));
       }
     }
-    index++;
+
+    return evalOps(opVec);
   }
+  return x;
 }
 
-std::vector<std::variant<Operation, double>>
-Unit::transformUnit(std::vector<std::variant<Operation, double>> input) {
-  std::vector<std::variant<Operation, double>> t = input;
-  performOps(t, '^', ' ');
-  performOps(t, '*', '/');
-  performOps(t, '+', '-');
-  return t;
-}
-
-double Unit::evalUnit(double x) {
-  // return if it is just x
-  if (uString == "x") {
-    return x;
-  } else if (uString == "-x") {
-    return -1.0f * x;
-  }
-
-  // return if just number
-  std::smatch m;
-  std::regex isNum("^(\\d*)(.?)(\\d*)$");
-  if (std::regex_match(uString, m, isNum)) {
-    return atof(m[0].str().c_str());
-  }
-
-  std::vector<std::variant<Operation, double>> transformed;
-
-  for (auto p : parts) {
-    if (std::holds_alternative<Unit>(p)) {
-      transformed.push_back(std::get<Unit>(p).evalUnit(x));
-    } else if (std::holds_alternative<double>(p)) {
-      transformed.push_back(std::get<double>(p));
-    } else if (std::holds_alternative<Operation>(p)) {
-      transformed.push_back(std::get<Operation>(p));
+double Unit::evalOps(std::vector<std::variant<double, Operator>> opVec) {
+  // order of operations: exponents, multiplication and division, addition and
+  // subtraction
+  //
+  // exponents:
+  for (auto it = opVec.begin(); it < opVec.end(); it++) {
+    if (std::holds_alternative<Operator>(*it)) {
+      Operator o = std::get<Operator>(*it);
+      if (o.getOp() == '^') {
+        double lhs, rhs;
+        lhs = std::get<double>(*(it - 1));
+        rhs = std::get<double>(*(it + 1));
+        auto er = (it - 1);
+        opVec.erase(er);
+        opVec.erase(er);
+        opVec.erase(er);
+        opVec.insert(er, o.evalOp(lhs, rhs));
+      }
     }
   }
 
-  while (transformed.size() > 1) {
-    transformed = transformUnit(transformed);
+  // multiplication and division:
+  for (auto it = opVec.begin(); it < opVec.end(); it++) {
+    if (std::holds_alternative<Operator>(*it)) {
+      Operator o = std::get<Operator>(*it);
+      if (o.getOp() == '*' || o.getOp() == '/') {
+        double lhs, rhs;
+        lhs = std::get<double>(*(it - 1));
+        rhs = std::get<double>(*(it + 1));
+        auto er = (it - 1);
+        opVec.erase(er);
+        opVec.erase(er);
+        opVec.erase(er);
+        opVec.insert(er, o.evalOp(lhs, rhs));
+      }
+    }
   }
 
-  // return the number if it is just a number
-  if (std::holds_alternative<double>(transformed.at(0))) {
-    return std::get<double>(transformed.at(0));
+  // addition and subtraction:
+  for (auto it = opVec.begin(); it < opVec.end(); it++) {
+    if (std::holds_alternative<Operator>(*it)) {
+      Operator o = std::get<Operator>(*it);
+      if (o.getOp() == '+' || o.getOp() == '-') {
+        double lhs, rhs;
+        lhs = std::get<double>(*(it - 1));
+        rhs = std::get<double>(*(it + 1));
+        auto er = (it - 1);
+        opVec.erase(er);
+        opVec.erase(er);
+        opVec.erase(er);
+        opVec.insert(er, o.evalOp(lhs, rhs));
+      }
+    }
   }
-  return 0;
+
+  if (opVec.size() == 1 && std::holds_alternative<double>(*opVec.begin())) {
+    return std::get<double>(*opVec.begin());
+  } else {
+    if (opVec.size() == 1) {
+      std::cout << "lonely operator!" << std::endl;
+      return 0;
+    }
+    return evalOps(opVec);
+  }
 }

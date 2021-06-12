@@ -11,17 +11,12 @@ int main(int argc, char *argv[]) {
   // TODO: add proper makefile
   // TODO: make it so not all equations update when you update a single equation
   // TODO: add ability to remove lines
-  // TODO: add ability to put negative sign before parentheses
-  // TODO: add implied multiplication to parentheses
-  // TODO: add square root function
-  // TODO: add trigonometric functions
-  // TODO: add logarithms
-  // TODO: add "solve for x" type equations (like circle equations) a.k.a add
-  // support for "=" sign
   // TODO: add variable movement speed
   // TODO: don't render lines that are completely off screen
-  // TODO: investigate using compute shader
   // TODO: change movement to be more manageable
+  // TODO: fix sqrt(x^2) crash
+  // TODO: allow switching between radians and degrees
+  //
 
   std::vector<std::string> currEqs = {""};
   std::vector<Equation *> eqs = {new Equation("")};

@@ -1,106 +1,167 @@
 #include "equation.h"
-#include "unit.h"
 
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 
-Equation::Equation(std::string equation) {
-  origEq = parenEq(equation);
-  // std::cout << "Original: " << equation << std::endl;
-  // std::cout << "Paren'd: " << origEq << std::endl;
+Equation::Equation(std::string eq) {
+  std::cout << "Original: " << eq << std::endl;
+  origEq = processEq(eq);
+  std::cout << "Processed: " << origEq << std::endl;
+
   baseUnit = new Unit(origEq);
 }
 
 Equation::~Equation() { delete baseUnit; }
 
-double Equation::evalAtX(double x) { return baseUnit->evalUnit(x); }
-
-bool Equation::isOperator(char c) {
+bool Equation::isModStart(char c) {
   switch (c) {
-  case '(':
-  case ')':
-  case '+':
-  case '-':
-  case '*':
-  case '/':
-  case ' ':
-  case '^':
+  case 's':
+  case 'c':
+  case 't':
     return true;
   default:
     return false;
   }
 }
 
-std::string Equation::parenEq(std::string eq) {
-  // go through and surround all numbers and variables with parenthesis
+bool Equation::isModulator(std::string t) {
+  if (t.length() == 3) {
+    if (t.compare("sin") == 0 || t.compare("cos") == 0 ||
+        t.compare("tan") == 0) {
+      return true;
+    }
+  } else if (t.length() == 4) {
+    if (t.compare("sqrt") == 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool Equation::isOperator(char c) {
+  switch (c) {
+  case '+':
+  case '-':
+  case '/':
+  case '*':
+  case '^':
+  case ' ':
+    return true;
+  default:
+    return false;
+  }
+}
+
+std::string Equation::processEq(std::string eq) {
+  // split equation into units and surround with parentheses
+  // what is a unit?
+  //	number: 3.5, 5, -2
+  //	variable: x, y, -x, -y
+  //	modulator expression: sin(x), sin(x+2), cos(3)
   std::string stepOneOut = "";
   std::string curr = "";
-  bool prevIsOp = true;
+  std::vector<int> exitDepths;
+  bool inMod = false;
+  int parenDepth = 0;
   for (auto it = eq.begin(); it < eq.end(); it++) {
-    // x can only ever be by itself or with a negative sign
-    if (*it == 'x') {
-      if (curr == "-") {
-        stepOneOut += "(-x)";
-        curr = "";
-      } else if (curr != "") {
-        stepOneOut += "(" + curr + ")";
-        curr = "";
-        stepOneOut += "(x)";
-      } else {
-        stepOneOut += "(x)";
-      }
-    } else if (!isOperator(*it)) {
-      curr += *it;
-    } else if (curr == "" && *it == '-' && prevIsOp) {
-      curr += *it;
-    } else {
+    if (isOperator(*it)) {
       if (curr != "") {
         stepOneOut += "(" + curr + ")";
         curr = "";
       }
       stepOneOut += *it;
+    } else if (isModStart(*it)) {
+      std::string test = "";
+      test += *it;
+      test += *(it + 1);
+      test += *(it + 2);
+      if (isModulator(test)) {
+        if (curr != "") {
+          stepOneOut += "(" + curr + ")";
+          curr = "";
+        }
+        stepOneOut += "(" + test;
+        exitDepths.push_back(parenDepth);
+        inMod = true;
+        it += 2;
+      } else {
+        test += *(it + 3);
+        if (isModulator(test)) {
+          if (curr != "") {
+            stepOneOut += "(" + curr + ")";
+            curr = "";
+          }
+
+          stepOneOut += "(" + test;
+          exitDepths.push_back(parenDepth);
+          inMod = true;
+          it += 3;
+        } else {
+          return "";
+        }
+      }
+    } else if (*it == 'x' || *it == 'y') {
+      if (curr != "") {
+        stepOneOut += "(" + curr + ")";
+        curr = "";
+      }
+      stepOneOut += "(";
+      stepOneOut += *it;
+      stepOneOut += ")";
+    } else if (*it == '(') {
+      parenDepth++;
+    } else if (*it == ')') {
+      parenDepth--;
+    } else {
+      curr += *it;
     }
-    if (isOperator(*it) && *it != ' ') {
-      prevIsOp = true;
-    } else if (*it != ' ') {
-      prevIsOp = false;
+
+    if (inMod && exitDepths.size() > 0 && *(it + 1) != '(') {
+      auto f = std::find(exitDepths.begin(), exitDepths.end(), parenDepth);
+      if (f != exitDepths.end()) {
+        stepOneOut += ")";
+        exitDepths.erase(f);
+        inMod = false;
+      }
     }
   }
-  // catch potential last unit and clear curr for reuse
   if (curr != "") {
     stepOneOut += "(" + curr + ")";
     curr = "";
   }
-
-  // add multiplication signs for implied multiplication
-  char last = -1;
-  curr = "";
-  std::string stepTwoOut = "";
-  for (auto it = stepOneOut.begin(); it < stepOneOut.end(); it++) {
-
-    if (*it != '(') {
-      last = *it;
-    } else if (last == ')') {
-      stepTwoOut += curr;
-      stepTwoOut += "*";
-      curr = "";
-    }
-    curr += *it;
-  }
-  if (curr != "") {
-    stepTwoOut += curr;
-    curr = "";
-  }
-
   // remove spaces
+  std::string stepTwoOut = "";
+  for (auto c : stepOneOut) {
+    if (c != ' ') {
+      stepTwoOut += c;
+    }
+  }
+
+  // add implied multiplication and subtraction
   std::string stepThreeOut = "";
   for (auto it = stepTwoOut.begin(); it < stepTwoOut.end(); it++) {
-    if (*it != ' ') {
+    if (*it == '-') {
+      if (it == stepTwoOut.begin()) {
+        stepThreeOut += "(0)-";
+      } else if (isOperator(*(it - 1))) {
+        stepThreeOut += "(0)-";
+      }
+    } else if (*it == '(') {
+      if (it != stepTwoOut.begin() && *(it - 1) == ')') {
+        stepThreeOut += "*(";
+      } else {
+        stepThreeOut += "(";
+      }
+    } else {
       stepThreeOut += *it;
     }
   }
+
   return stepThreeOut;
 }
+
+double Equation::evalAtX(double x) { return baseUnit->evalUnit(x); }
 
 std::map<double, double> Equation::exportRange(double xPos, double dist,
                                                double resolution,
@@ -115,9 +176,9 @@ std::map<double, double> Equation::exportRange(double xPos, double dist,
 
   double startX = xPos - dist;
 
-  // everything is multiplied by 10 to avoid error with floating point precision
-  for (double i = 0; i <= dist * 20 + resolution * 10; i += resolution * 10) {
-    ret[startX + (i / 10.0f)] = evalAtX(startX + (i / 10.0f));
+  for (double i = 0; i <= dist * 2 + resolution; i += resolution) {
+    ret[startX + i] = evalAtX(startX + i);
   }
+
   return ret;
 }
