@@ -12,12 +12,13 @@ A 2d Graphing Calculator using Modern OpenGL
 
 - Basic operations (+, -, *, /, ^)
 - Order of operations (parentheses, etc)
+- Functions: sin, cos, tan, sqrt
 - Multiple lines and ability to change line color
 
 ## Known issues
 
 - floating point errors
-- functions with undefined values sometimes display strange behavior
+- functions with undefined values (e.g. divides by 0 or goes to infinity) sometimes display strange behavior
 - glLineWidth may not work on some (maybe all) versions of macOS because of limited GL_LINE_WIDTH_RANGE  
 
 ## Dependencies  
