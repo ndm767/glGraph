@@ -35,3 +35,4 @@ glGraph
 #ide stuff
 .vscode
 vgcore.*
+*.swp
