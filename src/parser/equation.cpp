@@ -56,8 +56,8 @@ bool Equation::isOperator(char c) {
 std::string Equation::processEq(std::string eq) {
   // split equation into units and surround with parentheses
   // what is a unit?
-  //	number: 3.5, 5, -2
-  //	variable: x, y, -x, -y
+  //	number: 3.5, 5
+  //	variable: x, y
   //	modulator expression: sin(x), sin(x+2), cos(3)
   std::string stepOneOut = "";
   std::string curr = "";
@@ -111,8 +111,18 @@ std::string Equation::processEq(std::string eq) {
       stepOneOut += ")";
     } else if (*it == '(') {
       parenDepth++;
+      if (curr != "") {
+        curr += "(";
+      } else {
+        stepOneOut += "(";
+      }
     } else if (*it == ')') {
       parenDepth--;
+      if (curr != "") {
+        curr += ")";
+      } else {
+        stepOneOut += ")";
+      }
     } else {
       curr += *it;
     }
