@@ -24,7 +24,7 @@ public:
   void clear();
   void update(double *xPos, double *scale, std::vector<std::string> *equs,
               double *resolution, bool *scaleRes, bool *updateEq,
-              bool *updatePos);
+              bool *updatePos, bool *useDeg);
 
   void graphPoint(double x, double y);
   void graphLine(std::map<double, double> points, int index, double scale);

@@ -14,8 +14,8 @@ int main(int argc, char *argv[]) {
   // TODO: add variable movement speed
   // TODO: don't render lines that are completely off screen
   // TODO: change movement to be more manageable
-  // TODO: allow switching between radians and degrees
   // TODO: make it so unit isn't completely reevaluated every time
+  // TODO: improve performance at high scales
 
   std::vector<std::string> currEqs = {""};
   std::vector<Equation *> eqs = {new Equation("")};
@@ -27,6 +27,9 @@ int main(int argc, char *argv[]) {
   double scale = 1.0f;
   bool scaleRes = true;
 
+  // misc calculator controls
+  bool useDeg = false;
+
   while (r.isRunning()) {
     r.clear();
 
@@ -34,7 +37,7 @@ int main(int argc, char *argv[]) {
     bool updatePos = false;
 
     r.update(&xPos, &scale, &currEqs, &resolution, &scaleRes, &updateEq,
-             &updatePos);
+             &updatePos, &useDeg);
 
     if (updateEq) {
       for (int i = 0; i < eqs.size(); i++) {
@@ -50,8 +53,8 @@ int main(int argc, char *argv[]) {
       int index = 0;
       for (auto s : currEqs) {
         if (s != "") {
-          std::map<double, double> map =
-              eqs.at(index)->exportRange(xPos, scale, resolution, scaleRes);
+          std::map<double, double> map = eqs.at(index)->exportRange(
+              xPos, scale, resolution, scaleRes, useDeg);
           r.graphLine(map, index, scale);
           /*for (auto [x, y] : map) {
             std::cout << "x=" << x << " "

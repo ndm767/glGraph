@@ -85,7 +85,8 @@ void Renderer::clear() {
 
 void Renderer::update(double *xPos, double *scale,
                       std::vector<std::string> *equs, double *resolution,
-                      bool *scaleRes, bool *updateEq, bool *updatePos) {
+                      bool *scaleRes, bool *updateEq, bool *updatePos,
+                      bool *useDeg) {
   s->useProgram();
   g->renderGrid(s);
   if (lineAct) {
@@ -111,6 +112,7 @@ void Renderer::update(double *xPos, double *scale,
   ImGui::SameLine();
   ImGui::InputDouble("res", resolution);
   ImGui::Checkbox("Scale Resolution", scaleRes);
+  ImGui::Checkbox("Use Degrees", useDeg);
   ImGui::Text("Enter equations: ");
   for (int i = 0; i < numLines; i++) {
     ImGui::InputTextWithHint(std::to_string(i).c_str(), "equation", eqBuf.at(i),
