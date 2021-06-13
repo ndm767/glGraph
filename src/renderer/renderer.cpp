@@ -183,25 +183,25 @@ void Renderer::update(double *xPos, double *scale,
       if (e.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
         running = false;
       } else {
-
+        double mSpeed = 0.05f * (*scale);
         switch (e.key.keysym.scancode) {
         case SDL_SCANCODE_W:
           *updatePos = true;
-          yOffset -= 0.1f;
+          yOffset -= mSpeed;
           break;
         case SDL_SCANCODE_S:
           *updatePos = true;
-          yOffset += 0.1f;
+          yOffset += mSpeed;
           break;
         case SDL_SCANCODE_A:
           *updatePos = true;
-          *xPos -= 0.1f;
-          xOffset += 0.1f;
+          *xPos -= mSpeed;
+          xOffset += mSpeed;
           break;
         case SDL_SCANCODE_D:
           *updatePos = true;
-          *xPos += 0.1f;
-          xOffset -= 0.1f;
+          *xPos += mSpeed;
+          xOffset -= mSpeed;
           break;
         case SDL_SCANCODE_Q:
           *updatePos = true;
