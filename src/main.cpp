@@ -9,7 +9,7 @@ int main(int argc, char *argv[]) {
   // TODO: axis grid
   // TODO: add proper makefile
   // TODO: add ability to remove lines
-  // TODO: make it so unit isn't completely reevaluated every time
+  // TODO: fix sub-unit bug sin((1+3)x) should not eval to sin(1 + 3x)
 
   std::vector<std::string> currEqs = {""};
   std::vector<Equation *> eqs = {new Equation("")};
@@ -33,6 +33,7 @@ int main(int argc, char *argv[]) {
     r.update(&xPos, &scale, &currEqs, &resolution, &scaleRes, &updateEq,
              &updatePos, &useDeg);
 
+    // update changed equations
     if (updateEq) {
       for (int i = 0; i < eqs.size(); i++) {
         delete eqs.at(i);
@@ -43,6 +44,7 @@ int main(int argc, char *argv[]) {
       }
     }
 
+    // redraw the equations when the camera position updates
     if (updatePos) {
       int index = 0;
       for (auto s : currEqs) {

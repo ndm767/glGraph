@@ -19,6 +19,8 @@ public:
 
 private:
   std::string eqStr;
+  bool hasVar;
+  double noVarVal;
 
   bool modExp;
   Modulator m;

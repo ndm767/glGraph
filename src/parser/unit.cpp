@@ -20,11 +20,15 @@ bool Unit::isOperator(char c) {
 Unit::Unit(std::string eq) {
   eqStr = eq;
   modExp = false;
+
+  // check if the expression has a function
   if (eq.size() >= 3) {
     if (eq.at(0) == 's' || eq.at(0) == 't' || eq.at(0) == 'c') {
       modExp = true;
     }
   }
+
+  // process the expression if it has a function
   if (modExp) {
     mod t = mod::NONE;
     int subPos = 3;
@@ -48,6 +52,7 @@ Unit::Unit(std::string eq) {
     modUnit =
         std::make_pair(temp, new Unit(eq.substr(subPos, eq.length() - subPos)));
   } else {
+    // process the expression if it doesn't have a function
     int parenDepth = 0;
     std::string curr = "";
     for (auto c : eq) {
@@ -73,16 +78,42 @@ Unit::Unit(std::string eq) {
       }
     }
   }
+
+  // detect if the expression has a variable
+  // if it does have a variable, then we let it be
+  // otherwise, we evaluate it so we don't have to re-evaluate it every time
+  bool tempHV = false;
+  for (auto c : eqStr) {
+    if (c == 'x' || c == 'y') {
+      tempHV = true;
+      break;
+    }
+  }
+
+  if (!tempHV) {
+    hasVar = true;
+    noVarVal = this->evalUnit(0);
+  }
+  hasVar = tempHV;
 }
 
 Unit::~Unit() {}
 
 double Unit::evalUnit(double x) {
+
+  // if the expression does not have a variable, then it will be the same every
+  // time and we can just return that value
+  if (!hasVar) {
+    return noVarVal;
+  }
   // std::cout << eqStr << std::endl;
+
+  // evaluate expression if it has a function
   if (modExp) {
     double val = modUnit.second->evalUnit(x);
     return modUnit.first.applyMod(val);
   } else {
+    // evaluate expression if it does not have a function
     // return if its just x
     if (eqStr == "x") {
       return x;
