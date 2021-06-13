@@ -5,9 +5,9 @@
 #include <iostream>
 
 Equation::Equation(std::string eq) {
-  std::cout << "Original: " << eq << std::endl;
+  // std::cout << "Original: " << eq << std::endl;
   origEq = processEq(eq);
-  std::cout << "Processed: " << origEq << std::endl;
+  // std::cout << "Processed: " << origEq << std::endl;
 
   baseUnit = new Unit(origEq);
 }
@@ -81,7 +81,7 @@ std::string Equation::processEq(std::string eq) {
           stepOneOut += "(" + curr + ")";
           curr = "";
         }
-        stepOneOut += "(" + test;
+        stepOneOut += "(" + test + "(";
         exitDepths.push_back(parenDepth);
         inMod = true;
         it += 2;
@@ -117,10 +117,15 @@ std::string Equation::processEq(std::string eq) {
       curr += *it;
     }
 
+    // deal with units inside of a modulator
     if (inMod && exitDepths.size() > 0 && *(it + 1) != '(') {
       auto f = std::find(exitDepths.begin(), exitDepths.end(), parenDepth);
       if (f != exitDepths.end()) {
-        stepOneOut += ")";
+        if (curr != "") {
+          stepOneOut += "(" + curr + ")";
+          curr = "";
+        }
+        stepOneOut += "))";
         exitDepths.erase(f);
         inMod = false;
       }
@@ -130,6 +135,7 @@ std::string Equation::processEq(std::string eq) {
     stepOneOut += "(" + curr + ")";
     curr = "";
   }
+
   // remove spaces
   std::string stepTwoOut = "";
   for (auto c : stepOneOut) {

@@ -14,7 +14,6 @@ int main(int argc, char *argv[]) {
   // TODO: add variable movement speed
   // TODO: don't render lines that are completely off screen
   // TODO: change movement to be more manageable
-  // TODO: fix sqrt(x^2) crash
   // TODO: allow switching between radians and degrees
   // TODO: make it so unit isn't completely reevaluated every time
 
