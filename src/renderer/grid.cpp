@@ -25,6 +25,15 @@ void Grid::updateGrid(double xOffset, double yOffset, double scale) {
     delete horizLines.at(i);
   }
   horizLines.clear();
+  for (float i = yOffset; i <= scale + yOffset; i += 1.0f / scale) {
+    std::vector<double> tVerts = {-1.0f, i, 0.0f, 1.0f, i, 0.0f};
+    horizLines.push_back(new Line(tVerts));
+  }
+
+  for (float i = yOffset; i >= -1.0f * scale + yOffset; i -= 1.0f / scale) {
+    std::vector<double> tVerts = {-1.0f, i, 0.0f, 1.0f, i, 0.0f};
+    horizLines.push_back(new Line(tVerts));
+  }
 
   if (xAct)
     delete xAxis;
