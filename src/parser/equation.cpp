@@ -177,7 +177,9 @@ std::string Equation::processEq(std::string eq) {
   return stepThreeOut;
 }
 
-double Equation::evalAtX(double x) { return baseUnit->evalUnit(x); }
+double Equation::evalAtX(double x, bool useDeg) {
+  return baseUnit->evalUnit(x, useDeg);
+}
 
 std::map<double, double> Equation::exportRange(double xPos, double dist,
                                                double resolution, bool scaleRes,
@@ -193,14 +195,7 @@ std::map<double, double> Equation::exportRange(double xPos, double dist,
   double startX = xPos - dist;
 
   for (double i = 0; i <= dist * 2 + resolution; i += resolution) {
-    double evalPos = startX + i;
-    if (useDeg) {
-      // convert from deg to rad
-      const double pi = 3.14159;
-      evalPos = evalPos * pi;
-      evalPos = evalPos / 180.0f;
-    }
-    ret[startX + i] = evalAtX(evalPos);
+    ret[startX + i] = evalAtX(startX + i, useDeg);
   }
 
   return ret;

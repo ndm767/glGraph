@@ -13,14 +13,15 @@ public:
   Unit(std::string eq);
   ~Unit();
 
-  double evalUnit(double x);
+  double evalUnit(double x, bool useDeg);
 
   std::string getEqStr() { return eqStr; }
 
 private:
   std::string eqStr;
   bool hasVar;
-  double noVarVal;
+  double noVarValDeg;
+  double noVarValRad;
 
   bool modExp;
   Modulator m;

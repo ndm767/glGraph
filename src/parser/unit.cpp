@@ -92,25 +92,33 @@ Unit::Unit(std::string eq) {
 
   if (!tempHV) {
     hasVar = true;
-    noVarVal = this->evalUnit(0);
+    noVarValDeg = this->evalUnit(0, true);
+    noVarValRad = this->evalUnit(0, false);
   }
   hasVar = tempHV;
 }
 
 Unit::~Unit() {}
 
-double Unit::evalUnit(double x) {
+double Unit::evalUnit(double x, bool useDeg) {
 
   // if the expression does not have a variable, then it will be the same every
   // time and we can just return that value
   if (!hasVar) {
-    return noVarVal;
+    return useDeg ? noVarValDeg : noVarValRad;
   }
   // std::cout << eqStr << std::endl;
 
   // evaluate expression if it has a function
   if (modExp) {
-    double val = modUnit.second->evalUnit(x);
+
+    double val = modUnit.second->evalUnit(x, useDeg);
+    if (useDeg) {
+      const double pi = 3.14159f;
+      val = val * pi;
+      val = val / 180.0f;
+    }
+
     return modUnit.first.applyMod(val);
   } else {
     // evaluate expression if it does not have a function
@@ -128,7 +136,7 @@ double Unit::evalUnit(double x) {
     std::vector<std::variant<double, Operator>> opVec;
     for (auto i : exp) {
       if (std::holds_alternative<Unit>(i)) {
-        opVec.push_back(std::get<Unit>(i).evalUnit(x));
+        opVec.push_back(std::get<Unit>(i).evalUnit(x, useDeg));
       } else if (std::holds_alternative<Operator>(i)) {
         opVec.push_back(std::get<Operator>(i));
       } else if (std::holds_alternative<double>(i)) {

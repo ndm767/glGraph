@@ -10,7 +10,7 @@ public:
   Equation(std::string eq);
   ~Equation();
 
-  double evalAtX(double x);
+  double evalAtX(double x, bool useDeg);
   std::map<double, double> exportRange(double xPos, double dist,
                                        double resolution, bool scaleRes,
                                        bool useDeg);
