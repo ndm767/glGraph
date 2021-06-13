@@ -8,7 +8,6 @@ int main(int argc, char *argv[]) {
   // TODO: axis labeling
   // TODO: axis grid
   // TODO: add proper makefile
-  // TODO: add ability to remove lines
 
   std::vector<std::string> currEqs = {""};
   std::vector<Equation *> eqs = {new Equation("")};
@@ -34,9 +33,13 @@ int main(int argc, char *argv[]) {
 
     // update changed equations
     if (updateEq) {
-      for (int i = 0; i < eqs.size(); i++) {
+      for (int i = 0; i < std::min(currEqs.size(), eqs.size()); i++) {
         delete eqs.at(i);
         eqs.at(i) = new Equation(currEqs.at(i));
+      }
+      if (currEqs.size() < eqs.size()) {
+        delete eqs.at(eqs.size() - 1);
+        eqs.erase(eqs.end() - 1);
       }
       if (currEqs.size() > eqs.size()) {
         eqs.push_back(new Equation(currEqs.at(currEqs.size() - 1)));

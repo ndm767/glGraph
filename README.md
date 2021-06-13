@@ -14,7 +14,7 @@ A 2d Graphing Calculator using Modern OpenGL
 - Order of operations (parentheses, etc)
 - Functions: sin, cos, tan, sqrt
 - Switch between radians and degrees
-- Multiple lines and ability to change line color
+- Multiple lines, ability to change line color, and ability to remove lines
 
 ## Known issues
 

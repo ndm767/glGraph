@@ -114,11 +114,23 @@ void Renderer::update(double *xPos, double *scale,
   ImGui::Checkbox("Scale Resolution", scaleRes);
   ImGui::Checkbox("Use Degrees", useDeg);
   ImGui::Text("Enter equations: ");
+  int lToR = -1;
   for (int i = 0; i < numLines; i++) {
     ImGui::InputTextWithHint(std::to_string(i).c_str(), "equation", eqBuf.at(i),
                              512);
+    if (ImGui::Button(std::string("Remove " + std::to_string(i)).c_str())) {
+      lToR = i;
+    }
   }
 
+  if (lToR != -1 && lToR < lines.size()) {
+    numLines--;
+    lines.erase(lines.begin() + lToR);
+    eqBuf.erase(eqBuf.begin() + lToR);
+    equs->erase(equs->begin() + lToR);
+    *updateEq = true;
+    *updatePos = true;
+  }
   if (ImGui::Button("Add line")) {
     eqBuf.push_back(new char[512]);
     for (int i = 0; i < 512; i++) {
@@ -144,13 +156,11 @@ void Renderer::update(double *xPos, double *scale,
     lInd = 0;
   if (lInd >= lines.size())
     lInd = lines.size() - 1;
-  if (currSel != lInd) {
-    if (lines.size() > 0) {
-      if (currSel != -1)
-        lines.at(currSel)->setSelected(false);
-      currSel = lInd;
-      lines.at(currSel)->setSelected(true);
-    }
+  if (lines.size() > 0) {
+    if (currSel != -1)
+      lines.at(currSel)->setSelected(false);
+    currSel = lInd;
+    lines.at(currSel)->setSelected(true);
   }
   ImGui::Text("Input line color:");
   ImGui::InputFloat3("rgb", newColor);
