@@ -7,14 +7,9 @@ int main(int argc, char *argv[]) {
 
   // TODO: axis labeling
   // TODO: axis grid
-  // TODO: add ability to specify screen dimensions
   // TODO: add proper makefile
-  // TODO: make it so not all equations update when you update a single equation
   // TODO: add ability to remove lines
-  // TODO: don't render lines that are completely off screen
-  // TODO: change movement to be more manageable
   // TODO: make it so unit isn't completely reevaluated every time
-  // TODO: improve performance at high scales
 
   std::vector<std::string> currEqs = {""};
   std::vector<Equation *> eqs = {new Equation("")};
