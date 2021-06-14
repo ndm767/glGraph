@@ -231,7 +231,7 @@ void Renderer::update(double *xPos, double *scale,
     *scale = 0.1f;
   }
   if (*updatePos) {
-    g->updateGrid(xOffset, yOffset, *scale, *resolution, *scaleRes);
+    g->updateGrid(xOffset, yOffset, *scale);
   }
 }
 
@@ -239,6 +239,7 @@ void Renderer::graphPoint(double x, double y) {}
 
 void Renderer::graphLine(std::map<double, double> points, int index,
                          double scale) {
+  // make sure line color and selection status persists between line updates
   bool select = false;
   float color[3] = {1.0f, 0.0f, 0.0f};
   if (lineAct && index < lines.size()) {
@@ -250,6 +251,7 @@ void Renderer::graphLine(std::map<double, double> points, int index,
   }
   lineAct = true;
 
+  // add the vertices that make up the line
   std::vector<double> verts;
 
   // int numPoints = points.size();
@@ -263,6 +265,8 @@ void Renderer::graphLine(std::map<double, double> points, int index,
     verts.push_back(0.0f);
     // i++;
   }
+
+  // either update the line or create a new one
   if (index < lines.size()) {
     lines.at(index) = new Line(verts);
     lines.at(index)->setSelected(select);

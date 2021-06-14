@@ -47,6 +47,16 @@ void Grid::updateGrid(double xOffset, double yOffset, double scale) {
   }
   vertLines.clear();
 
+  for (float i = xOffset / scale; i <= scale + xOffset; i += 1.0f / scale) {
+    std::vector<double> tVerts = {i, -1.0f, 0.0f, i, 1.0f, 0.0f};
+    vertLines.push_back(new Line(tVerts));
+  }
+  for (float i = xOffset / scale; i >= -1.0 * scale + xOffset;
+       i -= 1.0f / scale) {
+    std::vector<double> tVerts = {i, -1.0f, 0.0f, i, 1.0f, 0.0f};
+    vertLines.push_back(new Line(tVerts));
+  }
+
   if (yAct)
     delete yAxis;
   double y = (0.0f + yOffset);
