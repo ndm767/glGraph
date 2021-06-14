@@ -231,7 +231,7 @@ void Renderer::update(double *xPos, double *scale,
     *scale = 0.1f;
   }
   if (*updatePos) {
-    g->updateGrid(xOffset, yOffset, *scale);
+    g->updateGrid(xOffset, yOffset, *scale, *resolution, *scaleRes);
   }
 }
 
@@ -252,16 +252,16 @@ void Renderer::graphLine(std::map<double, double> points, int index,
 
   std::vector<double> verts;
 
-  int numPoints = points.size();
-  double step = 2.0f / (numPoints - 2);
+  // int numPoints = points.size();
+  // double step = 2.0f / (numPoints - 2);
 
-  int i = 0;
+  // int i = 0;
   for (auto [x, y] : points) {
-    // verts.push_back(x + xOffset);
-    verts.push_back(i * step - 1.0f);
+    verts.push_back((x + xOffset) / scale);
+    // verts.push_back(i * step - 1.0);
     verts.push_back(y / scale + yOffset);
     verts.push_back(0.0f);
-    i++;
+    // i++;
   }
   if (index < lines.size()) {
     lines.at(index) = new Line(verts);
