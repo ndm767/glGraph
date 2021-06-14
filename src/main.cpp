@@ -6,7 +6,6 @@
 int main(int argc, char *argv[]) {
 
   // TODO: axis labeling
-  // TODO: axis grid
   // TODO: add proper makefile
 
   std::vector<std::string> currEqs = {""};
