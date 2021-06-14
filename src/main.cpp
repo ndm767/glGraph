@@ -5,9 +5,6 @@
 
 int main(int argc, char *argv[]) {
 
-  // TODO: axis labeling
-  // TODO: add proper makefile
-
   std::vector<std::string> currEqs = {""};
   std::vector<Equation *> eqs = {new Equation("")};
   Renderer r;
