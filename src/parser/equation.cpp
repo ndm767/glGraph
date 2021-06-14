@@ -162,6 +162,8 @@ std::string Equation::processEq(std::string eq) {
         stepThreeOut += "(0)-";
       } else if (isOperator(*(it - 1))) {
         stepThreeOut += "(0)-";
+      } else {
+        stepThreeOut += "-";
       }
     } else if (*it == '(') {
       if (it != stepTwoOut.begin() && *(it - 1) == ')') {
