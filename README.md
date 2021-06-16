@@ -2,6 +2,9 @@
 
 A 2d Graphing Calculator using Modern OpenGL
 
+## Demo
+https://user-images.githubusercontent.com/5031736/122145371-1c5d8400-ce23-11eb-9e6e-e537469c06df.mp4
+
 ## Information
 
 - This has only been tested on Fedora 34, it should work on other OS's but I make no guarantees.  
