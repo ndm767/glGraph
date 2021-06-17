@@ -146,6 +146,22 @@ std::string Equation::processEq(std::string eq) {
     curr = "";
   }
 
+  // bad hack to fix issue with parentheses not adding up
+  int numEnd = 0;
+  int numBegin = 0;
+  for (auto c : stepOneOut) {
+    if (c == ')')
+      numEnd++;
+    if (c == '(')
+      numBegin++;
+  }
+
+  if (numBegin > numEnd) {
+    for (int i = 0; i < numBegin - numEnd; i++) {
+      stepOneOut += ")";
+    }
+  }
+
   // remove spaces
   std::string stepTwoOut = "";
   for (auto c : stepOneOut) {

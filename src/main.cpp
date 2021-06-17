@@ -5,6 +5,8 @@
 
 int main(int argc, char *argv[]) {
 
+  // TODO: add live equation parsing
+
   std::vector<std::string> currEqs = {""};
   std::vector<Equation *> eqs = {new Equation("")};
   Renderer r;
