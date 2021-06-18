@@ -18,7 +18,7 @@ https://user-images.githubusercontent.com/5031736/122145371-1c5d8400-ce23-11eb-9
 - Functions: sin, cos, tan, sqrt
 - Switch between radians and degrees
 - Multiple lines, ability to change line color, and ability to remove lines
-- Live function updating (not shown in example)
+- Live equation updating (not shown in example)
 
 ## Known issues
 
