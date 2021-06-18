@@ -25,6 +25,7 @@ https://user-images.githubusercontent.com/5031736/122145371-1c5d8400-ce23-11eb-9
 - floating point precision errors
 - functions with undefined values (e.g. divides by 0 or goes to infinity) sometimes display strange behavior
 - glLineWidth may not work on some (maybe all) versions of macOS because of limited GL_LINE_WIDTH_RANGE  
+- invalid character sequences may cause program to crash
 
 ## Dependencies  
 
