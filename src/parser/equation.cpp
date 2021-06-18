@@ -196,7 +196,9 @@ std::string Equation::processEq(std::string eq) {
 }
 
 double Equation::evalAtX(double x, bool useDeg) {
-  return baseUnit->evalUnit(x, useDeg);
+  double ret = 0;
+  ret = baseUnit->evalUnit(x, useDeg);
+  return ret;
 }
 
 std::map<double, double> Equation::exportRange(double xPos, double dist,

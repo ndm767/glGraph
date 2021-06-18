@@ -101,9 +101,8 @@ Unit::Unit(std::string eq) {
 Unit::~Unit() {}
 
 double Unit::evalUnit(double x, bool useDeg) {
-
-  // if the expression does not have a variable, then it will be the same every
-  // time and we can just return that value
+  // if the expression does not have a variable, then it will be the same
+  // every time and we can just return that value
   if (!hasVar) {
     return useDeg ? noVarValDeg : noVarValRad;
   }
@@ -150,6 +149,20 @@ double Unit::evalUnit(double x, bool useDeg) {
 }
 
 double Unit::evalOps(std::vector<std::variant<double, Operator>> opVec) {
+  // handle invalid expressions
+  for (auto it = opVec.begin(); it < opVec.end(); it++) {
+    if (std::holds_alternative<Operator>(*it)) {
+      if (it == opVec.end() - 1) {
+        return 0;
+      }
+      if (!std::holds_alternative<double>(*(it - 1))) {
+        return 0;
+      }
+      if (!std::holds_alternative<double>(*(it + 1))) {
+        return 0;
+      }
+    }
+  }
   // order of operations: exponents, multiplication and division, addition and
   // subtraction
   //
@@ -203,7 +216,6 @@ double Unit::evalOps(std::vector<std::variant<double, Operator>> opVec) {
       }
     }
   }
-
   if (opVec.size() == 1 && std::holds_alternative<double>(*opVec.begin())) {
     return std::get<double>(*opVec.begin());
   } else {
