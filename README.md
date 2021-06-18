@@ -18,13 +18,13 @@ https://user-images.githubusercontent.com/5031736/122145371-1c5d8400-ce23-11eb-9
 - Functions: sin, cos, tan, sqrt
 - Switch between radians and degrees
 - Multiple lines, ability to change line color, and ability to remove lines
+- Live function updating (not shown in example)
 
 ## Known issues
 
 - floating point precision errors
 - functions with undefined values (e.g. divides by 0 or goes to infinity) sometimes display strange behavior
 - glLineWidth may not work on some (maybe all) versions of macOS because of limited GL_LINE_WIDTH_RANGE  
-- program will crash if inputted equation is invalid
 
 ## Dependencies  
 
