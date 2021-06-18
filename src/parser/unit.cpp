@@ -21,6 +21,14 @@ Unit::Unit(std::string eq) {
   eqStr = eq;
   modExp = false;
 
+  // deal with empty unit
+  if (eq == "()") {
+    hasVar = false;
+    noVarValDeg = 0;
+    noVarValRad = 0;
+    return;
+  }
+
   // check if the expression has a function
   if (eq.size() >= 3) {
     if (eq.at(0) == 's' || eq.at(0) == 't' || eq.at(0) == 'c') {
