@@ -87,6 +87,11 @@ void Renderer::update(double *xPos, double *scale,
                       std::vector<std::string> *equs, double *resolution,
                       bool *scaleRes, bool *updateEq, bool *updatePos,
                       bool *useDeg) {
+  std::vector<std::string> oldEqBuf;
+  for (auto e : eqBuf) {
+    oldEqBuf.push_back(std::string(e));
+  }
+
   s->useProgram();
   g->renderGrid(s);
   if (lineAct) {
@@ -141,13 +146,22 @@ void Renderer::update(double *xPos, double *scale,
     *updateEq = true;
     *updatePos = true;
   }
-  ImGui::SameLine();
+  /*ImGui::SameLine();
   if (ImGui::Button("Graph")) {
     for (int i = 0; i < eqBuf.size(); i++) {
       equs->at(i) = std::string(eqBuf.at(i));
     }
     *updateEq = true;
     *updatePos = true;
+  }*/
+  // on-the-fly equation handling
+  for (int i = 0; i < eqBuf.size(); i++) {
+    if (i >= oldEqBuf.size() ||
+        std::string(eqBuf.at(i)).compare(oldEqBuf.at(i))) {
+      equs->at(i) = std::string(eqBuf.at(i));
+      *updateEq = true;
+      *updatePos = true;
+    }
   }
   ImGui::Text("Line index:");
   ImGui::SameLine();
