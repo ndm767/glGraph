@@ -4,6 +4,7 @@
 #include <iostream>
 #include <regex>
 
+// is a character an operator expression
 bool Unit::isOperator(char c) {
   switch (c) {
   case '+':
@@ -17,6 +18,7 @@ bool Unit::isOperator(char c) {
   }
 }
 
+// create the unit expression
 Unit::Unit(std::string eq) {
   eqStr = eq;
   modExp = false;
@@ -134,6 +136,8 @@ double Unit::evalUnit(double x, bool useDeg) {
       return x;
     }
     // return if its just a number
+    // regex matches anything that follows the patterns d.d, .d, d., and d where
+    // d is any number of digits 0-9
     std::smatch match;
     std::regex isNum("^(\\d*)(.?)(\\d*)$");
     if (std::regex_match(eqStr, match, isNum)) {
@@ -156,6 +160,7 @@ double Unit::evalUnit(double x, bool useDeg) {
   return x;
 }
 
+// evaluate any operator expressions inside the unit
 double Unit::evalOps(std::vector<std::variant<double, Operator>> opVec) {
   // handle invalid expressions
   for (auto it = opVec.begin(); it < opVec.end(); it++) {
@@ -224,6 +229,8 @@ double Unit::evalOps(std::vector<std::variant<double, Operator>> opVec) {
       }
     }
   }
+
+  // if there is only one number left in the expression, return that number
   if (opVec.size() == 1 && std::holds_alternative<double>(*opVec.begin())) {
     return std::get<double>(*opVec.begin());
   } else {
@@ -231,6 +238,8 @@ double Unit::evalOps(std::vector<std::variant<double, Operator>> opVec) {
       std::cout << "lonely operator!" << std::endl;
       return 0;
     }
+    // if there are still operators left after processing, re-process them until
+    // there is one number left
     return evalOps(opVec);
   }
 }
