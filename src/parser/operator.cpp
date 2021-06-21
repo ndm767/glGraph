@@ -6,6 +6,7 @@ Operator::Operator(char c) { op = c; }
 
 Operator::~Operator() {}
 
+// evaluate the operator
 double Operator::evalOp(double lhs, double rhs) {
   switch (op) {
   case '+':
