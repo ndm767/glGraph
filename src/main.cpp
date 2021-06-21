@@ -33,10 +33,12 @@ int main(int argc, char *argv[]) {
         delete eqs.at(i);
         eqs.at(i) = new Equation(currEqs.at(i));
       }
+      // if an equation should be removed, remove it
       if (currEqs.size() < eqs.size()) {
         delete eqs.at(eqs.size() - 1);
         eqs.erase(eqs.end() - 1);
       }
+      // if an equation should be added, add it
       if (currEqs.size() > eqs.size()) {
         eqs.push_back(new Equation(currEqs.at(currEqs.size() - 1)));
       }
