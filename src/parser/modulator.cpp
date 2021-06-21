@@ -7,6 +7,7 @@ Modulator::Modulator() { m = mod::NONE; }
 
 Modulator::~Modulator(){};
 
+// apply the function
 double Modulator::applyMod(double x) {
   switch (m) {
   case mod::SIN:
@@ -24,6 +25,7 @@ double Modulator::applyMod(double x) {
   }
 }
 
+// print the modulator type (used for debug)
 std::ostream &operator<<(std::ostream &os, const Modulator &m) {
   std::string ret = "";
   switch (m.getM()) {
