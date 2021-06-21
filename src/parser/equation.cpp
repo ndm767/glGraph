@@ -14,6 +14,7 @@ Equation::Equation(std::string eq) {
 
 Equation::~Equation() { delete baseUnit; }
 
+// is the char the start of a function (sqrt, sin, cos, tan)
 bool Equation::isModStart(char c) {
   switch (c) {
   case 's':
@@ -25,6 +26,7 @@ bool Equation::isModStart(char c) {
   }
 }
 
+// is the string a function (sqrt, sin, cos, tan)
 bool Equation::isModulator(std::string t) {
   if (t.length() == 3) {
     if (t.compare("sin") == 0 || t.compare("cos") == 0 ||
@@ -39,6 +41,8 @@ bool Equation::isModulator(std::string t) {
   return false;
 }
 
+// is the char an operator (space is counted as an operator here because spaces
+// have not been removed yet when this function is used
 bool Equation::isOperator(char c) {
   switch (c) {
   case '+':
@@ -53,6 +57,7 @@ bool Equation::isOperator(char c) {
   }
 }
 
+// process the equation into something that the computer can understand
 std::string Equation::processEq(std::string eq) {
   // split equation into units and surround with parentheses
   // what is a unit?
@@ -171,6 +176,8 @@ std::string Equation::processEq(std::string eq) {
   }
 
   // add implied multiplication and subtraction
+  // implied multiplication is when 3x = (3)*(x)
+  // implied subtraction is when -2 = (0) - (2)
   std::string stepThreeOut = "";
   for (auto it = stepTwoOut.begin(); it < stepTwoOut.end(); it++) {
     if (*it == '-') {
@@ -195,12 +202,14 @@ std::string Equation::processEq(std::string eq) {
   return stepThreeOut;
 }
 
+// evaluate at a single x-value
 double Equation::evalAtX(double x, bool useDeg) {
   double ret = 0;
   ret = baseUnit->evalUnit(x, useDeg);
   return ret;
 }
 
+// evaluate over a range of x-values
 std::map<double, double> Equation::exportRange(double xPos, double dist,
                                                double resolution, bool scaleRes,
                                                bool useDeg) {
@@ -209,6 +218,7 @@ std::map<double, double> Equation::exportRange(double xPos, double dist,
   if (resolution == 0.0f)
     resolution = 0.1f;
 
+  // scale the resolution based upon the zoom of the camera
   if (scaleRes)
     resolution = resolution * pow(dist, 0.5f);
 

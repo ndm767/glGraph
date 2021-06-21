@@ -10,7 +10,10 @@ public:
   Equation(std::string eq);
   ~Equation();
 
+  // evaluate at a single x-value
   double evalAtX(double x, bool useDeg);
+
+  // evaluate over a range of x-values
   std::map<double, double> exportRange(double xPos, double dist,
                                        double resolution, bool scaleRes,
                                        bool useDeg);
