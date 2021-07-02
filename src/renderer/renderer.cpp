@@ -167,9 +167,9 @@ void Renderer::update(double *xPos, double *scale,
   ImGui::SameLine();
   ImGui::InputInt("", &lInd);
   if (lInd < 0)
-    lInd = 0;
-  if (lInd >= lines.size())
     lInd = lines.size() - 1;
+  if (lInd >= lines.size())
+    lInd = 0;
   if (lines.size() > 0) {
     if (currSel != -1)
       lines.at(currSel)->setSelected(false);
