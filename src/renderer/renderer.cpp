@@ -8,6 +8,9 @@ Renderer::Renderer() {
   lineAct = false;
 
   eqUpdate = false;
+	
+  //fixes problem on Windows where SDL already defines a main function
+  SDL_SetMainReady();
 
   SDL_Init(SDL_INIT_VIDEO);
 
