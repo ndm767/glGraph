@@ -4,9 +4,9 @@
 #include <iostream>
 
 Grid::Grid() {
-  updateGrid(0.0f, 0.0f, 1.0f);
   xAct = false;
   yAct = false;
+  updateGrid(0.0f, 0.0f, 1.0f);
 }
 
 Grid::~Grid() {
